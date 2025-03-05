@@ -1,0 +1,111 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  LAWYER
+  ADMIN
+}
+
+enum SessionStatus {
+  PENDING
+  ACTIVE
+  COMPLETED
+  REJECTED
+}
+
+enum ApprovalStatus {
+  PENDING
+  ACCEPTED
+  BLOCKED
+}
+
+model User {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  email     String    @unique
+  password  String
+  role      Role      @default(USER)
+  sessions  Session[] @relation("UserSessions") // Relation to sessions
+  chats     Chat[]    @relation("UserChats") // Relation to chats
+  messages  Message[] @relation("UserMessages") // Relation to messages
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Lawyer {
+  id             String         @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  email          String         @unique
+  password       String
+  role           Role           @default(LAWYER)
+  approvalStatus ApprovalStatus @default(PENDING)
+  fee            Float
+  experience     Int?
+  expertise      String?
+  location       String?
+  bio            String?
+  description    String?
+  casesHandled   Int            @default(0)
+  sessions       Session[]      @relation("LawyerSessions") // Relation to sessions
+  chats          Chat[]         @relation("LawyerChats") // Relation to chats
+  messages       Message[]      @relation("LawyerMessages") // Relation to messages
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+}
+
+model Admin {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(ADMIN)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Session {
+  id              String        @id @default(auto()) @map("_id") @db.ObjectId
+  userId          String        @db.ObjectId
+  lawyerId        String        @db.ObjectId
+  title           String
+  description     String?
+  user            User          @relation("UserSessions", fields: [userId], references: [id])
+  lawyer          Lawyer        @relation("LawyerSessions", fields: [lawyerId], references: [id])
+  chat            Chat?         @relation("SessionChat") // Relation to chat
+  status          SessionStatus @default(PENDING)
+  userCompleted   Boolean       @default(false)
+  lawyerCompleted Boolean       @default(false)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model Chat {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  sessionId String    @unique @db.ObjectId
+  session   Session   @relation("SessionChat", fields: [sessionId], references: [id])
+  userId    String    @db.ObjectId
+  lawyerId  String    @db.ObjectId
+  user      User      @relation("UserChats", fields: [userId], references: [id])
+  lawyer    Lawyer    @relation("LawyerChats", fields: [lawyerId], references: [id])
+  messages  Message[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Message {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  chatId       String   @db.ObjectId
+  chat         Chat     @relation(fields: [chatId], references: [id])
+  senderId     String   @db.ObjectId
+  senderUser   User?    @relation("UserMessages", fields: [senderId], references: [id])
+  senderLawyer Lawyer?  @relation("LawyerMessages", fields: [senderId], references: [id])
+  content      String
+  sentAt       DateTime @default(now())
+}
