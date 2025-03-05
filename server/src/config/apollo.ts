@@ -1,13 +1,9 @@
 import { ApolloServer } from "apollo-server-express";
-import { buildSchema } from "type-graphql";
-import { resolvers } from "../graphql/schema";
 import { context } from "../graphql/context";
+import { createSchema } from "../graphql/schema";
 
 export const createApolloServer = async () => {
-  const schema = await buildSchema({
-    resolvers,
-    authChecker: require("../graphql/authChecker").authChecker,
-  });
+  const schema = await createSchema();
 
   return new ApolloServer({
     schema,
