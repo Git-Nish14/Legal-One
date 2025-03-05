@@ -16,23 +16,24 @@ export class User {
   @Field()
   email!: string;
 
-  password!: string; // Not exposed in GraphQL
+  @Field()
+  password!: string;
 
   @Field(() => Role)
-  role!: Role;
+  role?: Role;
 
-  @Field(() => [Session])
-  sessions!: Session[];
+  @Field(() => [Session], { nullable: true })
+  sessions?: Session[];
 
-  @Field(() => [Chat])
-  chats!: Chat[];
+  @Field(() => [Chat], { nullable: true })
+  chats?: Chat[];
 
-  @Field(() => [Message])
-  messages!: Message[];
-
-  @Field()
-  createdAt!: Date;
+  @Field(() => [Message], { nullable: true })
+  messages?: Message[];
 
   @Field()
-  updatedAt!: Date;
+  createdAt?: Date;
+
+  @Field()
+  updatedAt?: Date;
 }

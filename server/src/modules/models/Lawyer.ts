@@ -17,7 +17,8 @@ export class Lawyer {
   @Field()
   email!: string;
 
-  password!: string; // Not exposed in GraphQL
+  @Field()
+  password!: string;
 
   @Field(() => Role)
   role!: Role;
@@ -46,13 +47,13 @@ export class Lawyer {
   @Field(() => Int)
   casesHandled!: number;
 
-  @Field(() => [Session])
+  @Field(() => [Session], { nullable: true })
   sessions!: Session[];
 
-  @Field(() => [Chat])
+  @Field(() => [Chat], { nullable: true })
   chats!: Chat[];
 
-  @Field(() => [Message])
+  @Field(() => [Message], { nullable: true })
   messages!: Message[];
 
   @Field()

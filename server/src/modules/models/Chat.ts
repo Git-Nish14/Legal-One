@@ -19,7 +19,7 @@ export class Chat {
   @Field(() => Lawyer)
   lawyer!: Lawyer;
 
-  @Field(() => [Message])
+  @Field(() => [Message], { nullable: true })
   messages!: Message[];
 
   @Field()

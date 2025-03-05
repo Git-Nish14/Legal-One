@@ -2,14 +2,14 @@ import express from "express";
 import cors from "cors";
 import { createApolloServer } from "./config/apollo";
 import { ENV } from "./config/env";
-// import { errorMiddleware } from "./middleware/error.middleware";
+import { errorMiddleware } from "./middleware/error.middleware";
 
 const app: any = express();
 app.use(cors());
 app.use(express.json());
 
 // Apply global error middleware
-// app.use(errorMiddleware);
+app.use(errorMiddleware);
 
 const startServer = async () => {
   const apolloServer = await createApolloServer();

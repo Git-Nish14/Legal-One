@@ -13,7 +13,8 @@ export class Admin {
   @Field()
   email!: string;
 
-  password!: string; // Not exposed in GraphQL
+  @Field()
+  password!: string;
 
   @Field(() => Role)
   role!: Role;
