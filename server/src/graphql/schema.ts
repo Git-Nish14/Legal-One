@@ -14,6 +14,12 @@ import { GetAdminResolver } from "../modules/resolvers/admin/getAdmin.query";
 import { CreateAdminResolver } from "../modules/resolvers/admin/createAdmin.mutation";
 import { CreateSessionResolver } from "../modules/resolvers/session/createSession.mutation";
 import { GetSessionsResolver } from "../modules/resolvers/session/getSessions.query";
+import { UpdateSessionStatusResolver } from "../modules/resolvers/session/updateSessionStatus.mutation";
+import { UpdateLawyerCompletedResolver } from "../modules/resolvers/session/updateLawyerCompleted.mutation";
+import { UpdateUserCompletedResolver } from "../modules/resolvers/session/updateUserCompleted.mutation";
+import { UpdateLawyerStatusResolver } from "../modules/resolvers/admin/updateLawyerStatus.mutation";
+import { GetAcceptedLawyersResolver } from "../modules/resolvers/lawyer/getAcceptedLawyers.query";
+import { UpdateLawyerProfileResolver } from "../modules/resolvers/lawyer/upadateLawyerProfile.mutation";
 
 export const resolvers = [
   GetUsersResolver,
@@ -30,6 +36,12 @@ export const resolvers = [
   CreateAdminResolver,
   CreateSessionResolver,
   GetSessionsResolver,
+  UpdateSessionStatusResolver,
+  UpdateUserCompletedResolver,
+  UpdateLawyerCompletedResolver,
+  UpdateLawyerStatusResolver,
+  GetAcceptedLawyersResolver,
+  UpdateLawyerProfileResolver,
 ] as const;
 
 export const createSchema = async () => {

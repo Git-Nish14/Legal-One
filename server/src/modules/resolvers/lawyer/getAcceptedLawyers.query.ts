@@ -1,13 +1,14 @@
-import { Resolver, Query, Ctx, Authorized } from "type-graphql";
+import { Resolver, Query, Ctx } from "type-graphql";
 import { Lawyer } from "../../models/Lawyer";
 import { Context } from "../../../graphql/context";
+import { ApprovalStatus } from "../../models/enums/ApprovalStatus";
 
 @Resolver()
-export class GetLawyersResolver {
+export class GetAcceptedLawyersResolver {
   @Query(() => [Lawyer])
-  @Authorized("ADMIN")
-  async getLawyers(@Ctx() ctx: Context): Promise<Lawyer[]> {
+  async getAcceptedLawyers(@Ctx() ctx: Context): Promise<Lawyer[]> {
     return ctx.prisma.lawyer.findMany({
+      where: { approvalStatus: ApprovalStatus.ACCEPTED },
       include: {
         sessions: true, // Include related sessions
         chats: true, // Include related chats
