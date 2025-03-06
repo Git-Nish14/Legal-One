@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { Context } from "../../../graphql/context";
 import { AuthPayload } from "../../models/types/AuthPayload";
+import { Lawyer } from "../../models/Lawyer";
 
 @Resolver()
 export class SignInLawyerResolver {
@@ -12,18 +13,18 @@ export class SignInLawyerResolver {
     @Arg("password") password: string,
     @Ctx() ctx: Context
   ): Promise<AuthPayload> {
-    const user = await ctx.prisma.user.findUnique({ where: { email } });
-    if (!user) {
+    const lawyer = await ctx.prisma.lawyer.findUnique({ where: { email } });
+    if (!lawyer) {
       throw new Error("Invalid email or password");
     }
 
-    const isValidPassword = await bcrypt.compare(password, user.password);
+    const isValidPassword = await bcrypt.compare(password, lawyer.password);
     if (!isValidPassword) {
       throw new Error("Invalid email or password");
     }
 
     const token = jwt.sign(
-      { id: user.id, role: user.role },
+      { id: lawyer.id, role: lawyer.role },
       process.env.JWT_SECRET as string,
       { expiresIn: "7d" }
     );
