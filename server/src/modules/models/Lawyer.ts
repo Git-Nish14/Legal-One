@@ -29,20 +29,20 @@ export class Lawyer {
   @Field(() => Float)
   fee!: number;
 
-  @Field(() => Int, { nullable: true })
-  experience?: number;
+  @Field(() => Int)
+  experience!: number;
 
-  @Field({ nullable: true })
-  expertise?: string;
+  @Field()
+  expertise!: string;
 
-  @Field({ nullable: true })
-  location?: string;
+  @Field()
+  location!: string;
 
-  @Field({ nullable: true })
-  bio?: string;
+  @Field()
+  bio!: string;
 
-  @Field({ nullable: true })
-  description?: string;
+  @Field()
+  description!: string;
 
   @Field(() => Int)
   casesHandled!: number;

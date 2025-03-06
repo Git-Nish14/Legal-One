@@ -16,13 +16,15 @@ export class CreateLawyerResolver {
     @Arg("email") email: string,
     @Arg("password") password: string,
     @Arg("fee") fee: number, // Required parameter comes before optional ones
-    @Arg("experience", () => Number, { nullable: true }) experience?: number,
-    @Arg("expertise", () => String, { nullable: true }) expertise?: string,
-    @Arg("location", () => String, { nullable: true }) location?: string,
-    @Arg("bio", () => String, { nullable: true }) bio?: string,
-    @Arg("description", () => String, { nullable: true }) description?: string,
+    @Arg("experience", () => Number) experience?: number,
+    @Arg("expertise", () => String) expertise?: string,
+    @Arg("location", () => String) location?: string,
+    @Arg("bio", () => String) bio?: string,
+    @Arg("description", () => String) description?: string
   ): Promise<AuthPayload> {
-    const existingUser = await ctx.prisma.lawyer.findUnique({ where: { email } });
+    const existingUser = await ctx.prisma.lawyer.findUnique({
+      where: { email },
+    });
     if (existingUser) {
       throw new Error("User with this email already exists");
     }
