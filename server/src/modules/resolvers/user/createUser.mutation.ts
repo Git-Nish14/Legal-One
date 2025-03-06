@@ -2,7 +2,7 @@ import { Resolver, Mutation, Arg, Ctx } from "type-graphql";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { Context } from "../../../graphql/context";
-import { AuthPayload } from "../../models/types/AuthPayload"; // Import shared type
+import { AuthPayload } from "../../models/types/AuthPayload";
 
 @Resolver()
 export class CreateUserResolver {
@@ -12,7 +12,7 @@ export class CreateUserResolver {
     @Arg("email") email: string,
     @Arg("password") password: string,
     @Ctx() ctx: Context
-  ) {
+  ): Promise<AuthPayload> {
     const existingUser = await ctx.prisma.user.findUnique({ where: { email } });
     if (existingUser) {
       throw new Error("User with this email already exists");
@@ -29,7 +29,7 @@ export class CreateUserResolver {
     });
 
     const token = jwt.sign(
-      { id: newUser.id, role: "USER" },
+      { id: newUser.id, role: newUser.role },
       process.env.JWT_SECRET as string,
       { expiresIn: "7d" }
     );

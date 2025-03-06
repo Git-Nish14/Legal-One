@@ -20,7 +20,7 @@ export class User {
   password!: string;
 
   @Field(() => Role)
-  role?: Role;
+  role!: Role;
 
   @Field(() => [Session], { nullable: true })
   sessions?: Session[];

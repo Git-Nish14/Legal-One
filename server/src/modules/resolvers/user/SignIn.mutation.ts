@@ -2,7 +2,7 @@ import { Resolver, Mutation, Arg, Ctx } from "type-graphql";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { Context } from "../../../graphql/context";
-import { AuthPayload } from "../../models/types/AuthPayload"; // Import shared type
+import { AuthPayload } from "../../models/types/AuthPayload";
 
 @Resolver()
 export class SignInResolver {

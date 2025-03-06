@@ -1,11 +1,11 @@
 import { Resolver, Query, Ctx } from "type-graphql";
-import { User } from "../../models/User"; // Import the User type
+import { User } from "../../models/User";
 import { Context } from "../../../graphql/context";
 
 @Resolver()
 export class GetUserResolver {
   @Query(() => User, { nullable: true })
-  async getUser(@Ctx() ctx: Context) {
+  async getUser(@Ctx() ctx: Context): Promise<User | null> {
     // Check if user is authenticated
     if (!ctx.user) {
       throw new Error("Not authenticated");
@@ -14,8 +14,15 @@ export class GetUserResolver {
     // Fetch user from the database
     const user = await ctx.prisma.user.findUnique({
       where: { id: ctx.user.id },
+      include: {
+        sessions: true, // Include related sessions
+        chats: true, // Include related chats
+        messages: true, // Include related messages
+      },
     });
-
-    return user; // Return user data
+    if (!user) {
+      return null; // Return null if user is not found
+    }
+    return user as any as User; // Return user data
   }
 }
