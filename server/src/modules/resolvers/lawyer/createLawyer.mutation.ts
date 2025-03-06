@@ -5,25 +5,31 @@ import { Context } from "../../../graphql/context";
 import { AuthPayload } from "../../models/types/AuthPayload";
 
 @Resolver()
-export class SignInResolver {
+export class CreateLawyerResolver {
   @Mutation(() => AuthPayload)
-  async signIn(
+  async createLawyer(
+    @Arg("name") name: string,
     @Arg("email") email: string,
     @Arg("password") password: string,
     @Ctx() ctx: Context
   ): Promise<AuthPayload> {
-    const user = await ctx.prisma.user.findUnique({ where: { email } });
-    if (!user) {
-      throw new Error("Invalid email or password");
+    const existingUser = await ctx.prisma.user.findUnique({ where: { email } });
+    if (existingUser) {
+      throw new Error("User with this email already exists");
     }
 
-    const isValidPassword = await bcrypt.compare(password, user.password);
-    if (!isValidPassword) {
-      throw new Error("Invalid email or password");
-    }
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    const newUser = await ctx.prisma.user.create({
+      data: {
+        name,
+        email,
+        password: hashedPassword,
+      },
+    });
 
     const token = jwt.sign(
-      { id: user.id, role: user.role },
+      { id: newUser.id, role: newUser.role },
       process.env.JWT_SECRET as string,
       { expiresIn: "7d" }
     );

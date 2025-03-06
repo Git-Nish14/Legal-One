@@ -3,9 +3,9 @@ import { User } from "../../models/User";
 import { Context } from "../../../graphql/context";
 
 @Resolver()
-export class GetUsersResolver {
+export class GetLawyersResolver {
   @Query(() => [User])
-  async getUsers(@Ctx() ctx: Context): Promise<User[]> {
+  async getLawyers(@Ctx() ctx: Context): Promise<User[]> {
     return ctx.prisma.user.findMany({
       include: {
         sessions: true, // Include related sessions
