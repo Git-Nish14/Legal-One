@@ -19,8 +19,8 @@ export class Session {
   @Field()
   title!: string;
 
-  @Field({ nullable: true })
-  description?: string;
+  @Field()
+  description!: string;
 
   @Field(() => Chat, { nullable: true })
   chat?: Chat;

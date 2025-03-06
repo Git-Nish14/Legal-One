@@ -12,6 +12,8 @@ import { GetDataResolver } from "../modules/resolvers/common/getData.query";
 import { SignInResolver } from "../modules/resolvers/common/signIn.mutation";
 import { GetAdminResolver } from "../modules/resolvers/admin/getAdmin.query";
 import { CreateAdminResolver } from "../modules/resolvers/admin/createAdmin.mutation";
+import { CreateSessionResolver } from "../modules/resolvers/session/createSession.mutation";
+import { GetSessionsResolver } from "../modules/resolvers/session/getSessions.query";
 
 export const resolvers = [
   GetUsersResolver,
@@ -26,6 +28,8 @@ export const resolvers = [
   GetDataResolver,
   GetAdminResolver,
   CreateAdminResolver,
+  CreateSessionResolver,
+  GetSessionsResolver,
 ] as const;
 
 export const createSchema = async () => {
