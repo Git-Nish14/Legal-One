@@ -10,6 +10,8 @@ import { CreateLawyerResolver } from "../modules/resolvers/lawyer/createLawyer.m
 import { GetLawyerResolver } from "../modules/resolvers/lawyer/getLawyer.query";
 import { GetDataResolver } from "../modules/resolvers/common/getData.query";
 import { SignInResolver } from "../modules/resolvers/common/signIn.mutation";
+import { GetAdminResolver } from "../modules/resolvers/admin/getAdmin.query";
+import { CreateAdminResolver } from "../modules/resolvers/admin/createAdmin.mutation";
 
 export const resolvers = [
   GetUsersResolver,
@@ -22,6 +24,8 @@ export const resolvers = [
   GetLawyerResolver,
   SignInResolver,
   GetDataResolver,
+  GetAdminResolver,
+  CreateAdminResolver,
 ] as const;
 
 export const createSchema = async () => {
