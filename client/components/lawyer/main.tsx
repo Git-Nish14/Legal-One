@@ -1,6 +1,6 @@
 import React from "react";
 
-function lawyermain() {
+function LawyerMain() {
   return (
     <div>
       <h1>I am Lawyer</h1>
@@ -8,4 +8,4 @@ function lawyermain() {
   );
 }
 
-export default lawyermain;
+export default LawyerMain;

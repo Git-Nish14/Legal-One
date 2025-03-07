@@ -1,6 +1,6 @@
 import React from "react";
 
-function usermain() {
+function UserMain() {
   return (
     <div>
       <h1>I am User</h1>
@@ -8,4 +8,4 @@ function usermain() {
   );
 }
 
-export default usermain;
+export default UserMain;

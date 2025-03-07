@@ -5,6 +5,7 @@ import { useQuery } from "@apollo/client";
 import { GET_DATA } from "@/graphql/queries";
 import UserMain from "@/components/user/main";
 import LawyerMain from "@/components/lawyer/main";
+import AdminMain from "@/components/admin/main";
 
 const HomePage = () => {
   const { data, loading, error } = useQuery(GET_DATA);
@@ -20,6 +21,8 @@ const HomePage = () => {
     return <UserMain />;
   } else if (userData.role === "LAWYER") {
     return <LawyerMain />;
+  } else if (userData.role === "ADMIN") {
+    return <AdminMain />;
   } else {
     return <div>Unauthorized</div>;
   }
