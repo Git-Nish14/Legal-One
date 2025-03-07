@@ -1,10 +1,7 @@
 import { ApolloServer } from "apollo-server-express";
 import { context } from "../graphql/context";
-import { createSchema } from "../graphql/schema";
 
-export const createApolloServer = async () => {
-  const schema = await createSchema();
-
+export const createApolloServer = async (schema: any) => {
   return new ApolloServer({
     schema,
     context,
