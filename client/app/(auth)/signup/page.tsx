@@ -4,15 +4,14 @@ import { useState } from "react";
 import { useMutation } from "@apollo/client";
 import Cookies from "js-cookie";
 import { USER_SIGNUP, LAWYER_SIGNUP } from "@/graphql/mutations";
+import { useRouter } from "next/navigation";
 
-// User Signup Type
 type UserSignupInputs = {
   name: string;
   email: string;
   password: string;
 };
 
-// Lawyer Signup Type (Extends User)
 type LawyerSignupInputs = UserSignupInputs & {
   description: string;
   bio: string;
@@ -26,7 +25,7 @@ type LawyerSignupInputs = UserSignupInputs & {
 const Signup: React.FC = () => {
   const [isLawyer, setIsLawyer] = useState<boolean>(false);
   const [step, setStep] = useState<number>(1);
-
+  const router = useRouter();
   // State for User Signup
   const [userData, setUserData] = useState<UserSignupInputs>({
     name: "",
@@ -34,7 +33,6 @@ const Signup: React.FC = () => {
     password: "",
   });
 
-  // State for Lawyer Signup (Includes User Fields)
   const [lawyerData, setLawyerData] = useState<LawyerSignupInputs>({
     name: "",
     email: "",
@@ -47,20 +45,14 @@ const Signup: React.FC = () => {
     fee: 0,
     casesHandled: 0,
   });
-
-  // Track if lawyer fields (name, email, password) are filled
   const isLawyerStep1Complete =
     lawyerData.name.trim() !== "" &&
     lawyerData.email.trim() !== "" &&
     lawyerData.password.trim() !== "";
-
-  // GraphQL Mutations
   const [userSignup, { loading: userLoading, error: userError }] =
     useMutation(USER_SIGNUP);
   const [lawyerSignup, { loading: lawyerLoading, error: lawyerError }] =
     useMutation(LAWYER_SIGNUP);
-
-  // Handle Input Change (for both User & Lawyer)
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -75,8 +67,6 @@ const Signup: React.FC = () => {
       setUserData((prev) => ({ ...prev, [name]: formattedValue }));
     }
   };
-
-  // Handle User Signup
   const handleUserSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -91,13 +81,12 @@ const Signup: React.FC = () => {
           }
         );
         alert("User signup successful!");
+        router.push("/home");
       }
     } catch (err) {
       console.error("User Signup Error:", err);
     }
   };
-
-  // Handle Lawyer Signup
   const handleLawyerSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -112,6 +101,7 @@ const Signup: React.FC = () => {
           }
         );
         alert("Lawyer signup successful!");
+        router.push("/home");
       }
     } catch (err) {
       console.error("Lawyer Signup Error:", err);
@@ -122,8 +112,6 @@ const Signup: React.FC = () => {
     <div className="flex justify-center items-center h-screen">
       <div className="bg-white p-6 shadow-lg rounded-lg w-96">
         <h2 className="text-2xl font-bold mb-4">Sign Up</h2>
-
-        {/* Toggle between User and Lawyer */}
         <div className="flex justify-between mb-4">
           <button
             onClick={() => {
@@ -148,8 +136,6 @@ const Signup: React.FC = () => {
             Lawyer
           </button>
         </div>
-
-        {/* Step 1: Common Fields for User and Lawyer */}
         {step === 1 && (
           <form
             onSubmit={
@@ -208,8 +194,6 @@ const Signup: React.FC = () => {
             </button>
           </form>
         )}
-
-        {/* Step 2: Additional Fields for Lawyer */}
         {isLawyer && step === 2 && (
           <form onSubmit={handleLawyerSignup}>
             <div className="mb-4">

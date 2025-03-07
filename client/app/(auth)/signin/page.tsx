@@ -3,7 +3,7 @@ import { useMutation } from "@apollo/client";
 import Cookies from "js-cookie";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { SIGNIN } from "@/graphql/mutations";
-
+import { useRouter } from "next/navigation";
 type SignInFormInputs = {
   email: string;
   password: string;
@@ -16,6 +16,7 @@ const SignIn: React.FC = () => {
     formState: { errors },
   } = useForm<SignInFormInputs>();
   const [signIn, { loading, error }] = useMutation(SIGNIN);
+  const router = useRouter();
 
   const onSubmit: SubmitHandler<SignInFormInputs> = async (data) => {
     try {
@@ -26,6 +27,7 @@ const SignIn: React.FC = () => {
         Cookies.set("Authorization", bearerToken, { expires: 7 });
         alert("Sign-in successful!");
         console.log("Token stored in cookies:", bearerToken);
+        router.push("/home");
       }
     } catch (err) {
       console.error("Sign-in error:", err);

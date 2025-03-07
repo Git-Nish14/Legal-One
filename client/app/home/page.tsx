@@ -3,9 +3,9 @@
 import React from "react";
 import { useQuery } from "@apollo/client";
 import { GET_DATA } from "@/graphql/queries";
-import UserMain from "@/components/user/main";
-import LawyerMain from "@/components/lawyer/main";
-import AdminMain from "@/components/admin/main";
+import UserMain from "@/components/user/UserMain";
+import LawyerMain from "@/components/lawyer/LawyerMain";
+import AdminMain from "@/components/admin/AdminMain";
 
 const HomePage = () => {
   const { data, loading, error } = useQuery(GET_DATA);
