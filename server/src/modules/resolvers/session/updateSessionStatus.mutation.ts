@@ -1,7 +1,9 @@
 import { Resolver, Mutation, Arg, Ctx, Authorized } from "type-graphql";
 import { Session } from "../../models/Session";
+import { Chat } from "../../models/Chat";
 import { Context } from "../../../graphql/context";
 import { SessionStatus } from "../../models/enums/SessionStatus";
+import { pubSub } from "../../../graphql/pubsub";
 
 @Resolver()
 export class UpdateSessionStatusResolver {
@@ -20,6 +22,7 @@ export class UpdateSessionStatusResolver {
     const session = await prisma.session.findUnique({
       where: { id: sessionId },
     });
+
     if (!session) {
       throw new Error("Session not found");
     }
@@ -41,15 +44,21 @@ export class UpdateSessionStatusResolver {
       include: { user: true, lawyer: true, chat: true },
     });
 
-    // If status is set to ACTIVE, create a chat and connect relations
+    let createdChat: Chat | null = null;
+
+    // If status is set to ACTIVE, create a chat and publish the event
     if (status === SessionStatus.ACTIVE) {
-      await prisma.chat.create({
+      createdChat = (await prisma.chat.create({
         data: {
           session: { connect: { id: sessionId } },
           user: { connect: { id: session.userId } },
           lawyer: { connect: { id: user.id } },
         },
-      });
+        include: { user: true, lawyer: true },
+      })) as any as Chat;
+
+      // Publish the event to notify subscribers that a new chat has been created
+      await pubSub.publish("NEW_CHAT", createdChat);
     }
 
     return updatedSession as any as Session;
