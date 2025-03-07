@@ -20,7 +20,8 @@ export class CreateLawyerResolver {
     @Arg("expertise", () => String) expertise?: string,
     @Arg("location", () => String) location?: string,
     @Arg("bio", () => String) bio?: string,
-    @Arg("description", () => String) description?: string
+    @Arg("description", () => String) description?: string,
+    @Arg("casesHandled", () => Number) casesHandled?: number
   ): Promise<AuthPayload> {
     const existingUser = await ctx.prisma.lawyer.findUnique({
       where: { email },
@@ -44,7 +45,7 @@ export class CreateLawyerResolver {
         description,
         role: Role.LAWYER,
         approvalStatus: ApprovalStatus.PENDING,
-        casesHandled: 0,
+        casesHandled,
       },
     });
 

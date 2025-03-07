@@ -27,7 +27,11 @@ export class GetDataResolver {
     if (role === "USER") {
       return (await ctx.prisma.user.findUnique({
         where: { id },
-        include: { sessions: true, chats: true, messages: true },
+        include: {
+          sessions: { include: { user: true, lawyer: true } },
+          chats: true,
+          messages: true,
+        },
       })) as any as User;
     }
 
@@ -35,7 +39,7 @@ export class GetDataResolver {
       return (await ctx.prisma.lawyer.findUnique({
         where: { id },
         include: {
-          sessions: true,
+          sessions: { include: { user: true, lawyer: true } },
           chats: true,
           messages: true,
         },

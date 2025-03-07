@@ -12,7 +12,13 @@ import { context } from "./graphql/context";
 
 const startServer = async () => {
   const app: any = express();
-  app.use(cors());
+  app.use(
+    cors({
+      origin: "http://localhost:3000",
+      credentials: true,
+    })
+  );
+
   app.use(express.json());
 
   // Apply global error middleware

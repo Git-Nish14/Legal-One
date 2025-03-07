@@ -10,6 +10,7 @@ export const USER_SIGNUP = gql`
 
 export const LAWYER_SIGNUP = gql`
   mutation LAWYER_SIGNUP(
+    $casesHandled: Float!
     $description: String!
     $bio: String!
     $location: String!
@@ -21,6 +22,7 @@ export const LAWYER_SIGNUP = gql`
     $name: String!
   ) {
     createLawyer(
+      casesHandled: $casesHandled
       description: $description
       bio: $bio
       location: $location
@@ -31,6 +33,14 @@ export const LAWYER_SIGNUP = gql`
       email: $email
       name: $name
     ) {
+      token
+    }
+  }
+`;
+
+export const SIGNIN = gql`
+  mutation signIn($password: String!, $email: String!) {
+    signIn(password: $password, email: $email) {
       token
     }
   }
