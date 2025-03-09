@@ -44,6 +44,9 @@ export class Lawyer {
   @Field()
   description!: string;
 
+  @Field()
+  image!: string;
+
   @Field(() => Int)
   casesHandled!: number;
 
