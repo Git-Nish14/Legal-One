@@ -20,6 +20,7 @@ export const LAWYER_SIGNUP = gql`
     $password: String!
     $email: String!
     $name: String!
+    $image: String!
   ) {
     createLawyer(
       casesHandled: $casesHandled
@@ -32,6 +33,7 @@ export const LAWYER_SIGNUP = gql`
       password: $password
       email: $email
       name: $name
+      image: $image
     ) {
       token
     }
