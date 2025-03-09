@@ -6,7 +6,9 @@ import { useRouter } from "next/navigation";
 
 export default function HomePage() {
     const router = useRouter();
-    const { data, loading, error } = useQuery(GET_DATA);
+    const { data, loading, error } = useQuery(GET_DATA, {
+        fetchPolicy: "network-only", // Always fetch fresh data from API
+    });
 
     useEffect(() => {
         if (!loading && data) {

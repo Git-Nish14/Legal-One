@@ -4,11 +4,14 @@ import { GET_DATA } from "@/graphql/queries";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import { client } from "@/lib/apollo/apollo-client";
 
 export default function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
-  const { data, loading, error } = useQuery(GET_DATA);
+  const { data, loading, error } = useQuery(GET_DATA, {
+    fetchPolicy: "network-only", // Always fetch fresh data from API
+  });
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error loading data</p>;
@@ -18,6 +21,7 @@ export default function Sidebar() {
   // Logout function to remove the Authorization cookie and redirect to login
   const handleLogout = () => {
     Cookies.remove("Authorization"); // Remove the cookie
+    client.clearStore();
     router.push("/signin"); // Redirect to login page
   };
 

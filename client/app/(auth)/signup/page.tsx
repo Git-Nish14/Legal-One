@@ -129,7 +129,7 @@ const Signup: React.FC = () => {
             expires: 7,
           }
         );
-        alert("User signup successful!");
+        // alert("User signup successful!");
         router.push("/home");
       }
     } catch (err) {
@@ -150,7 +150,7 @@ const Signup: React.FC = () => {
             expires: 7,
           }
         );
-        alert("Lawyer signup successful!");
+        // alert("Lawyer signup successful!");
         router.push("/home");
       }
     } catch (err) {

@@ -6,7 +6,9 @@ import Link from "next/link";
 
 export default function Navbar() {
     const pathname = usePathname();
-    const { data, loading, error } = useQuery(GET_DATA);
+    const { data, loading, error } = useQuery(GET_DATA, {
+        fetchPolicy: "network-only", // Always fetch fresh data from API
+    });
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error loading data</p>;

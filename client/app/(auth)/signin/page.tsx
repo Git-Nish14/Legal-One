@@ -25,7 +25,7 @@ const SignIn: React.FC = () => {
       if (response.data?.signIn?.token) {
         const bearerToken = `Bearer ${response.data.signIn.token}`;
         Cookies.set("Authorization", bearerToken, { expires: 7 });
-        alert("Sign-in successful!");
+        // alert("Sign-in successful!");
         console.log("Token stored in cookies:", bearerToken);
         router.push("/home");
       }
