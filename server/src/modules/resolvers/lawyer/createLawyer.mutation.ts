@@ -15,7 +15,8 @@ export class CreateLawyerResolver {
     @Arg("name") name: string,
     @Arg("email") email: string,
     @Arg("password") password: string,
-    @Arg("fee") fee: number, // Required parameter comes before optional ones
+    @Arg("fee") fee: number,
+    @Arg("image") image: string, // Accept Image URL
     @Arg("experience", () => Number) experience?: number,
     @Arg("expertise", () => String) expertise?: string,
     @Arg("location", () => String) location?: string,
@@ -43,17 +44,16 @@ export class CreateLawyerResolver {
         location,
         bio,
         description,
+        casesHandled,
+        image, // Save Image URL in DB
         role: Role.LAWYER,
         approvalStatus: ApprovalStatus.PENDING,
-        casesHandled,
       },
     });
 
-    const token = jwt.sign(
-      { id: newLawyer.id, role: newLawyer.role },
-      process.env.JWT_SECRET as string,
-      { expiresIn: "7d" }
-    );
+    const token = jwt.sign({ id: newLawyer.id, role: newLawyer.role }, process.env.JWT_SECRET as string, {
+      expiresIn: "7d",
+    });
 
     return { token };
   }

@@ -52,6 +52,7 @@ model Lawyer {
   location       String?
   bio            String?
   description    String?
+  image          String?
   casesHandled   Int            @default(0)
   sessions       Session[]      @relation("LawyerSessions") // Relation to sessions
   chats          Chat[]         @relation("LawyerChats") // Relation to chats

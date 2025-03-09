@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@apollo/client": "^3.13.2",
+    "axios": "^1.8.2",
+    "dotenv": "^16.4.7",
     "framer-motion": "^12.4.10",
     "graphql": "^16.10.0",
     "graphql-ws": "^5.16.2",
