@@ -77,3 +77,39 @@ export const GET_DATA = gql`
     }
   }
 `;
+
+export const GET_ACCEPTED_LAWYERS = gql`
+query GET_ACCEPTED_LAWYERS{
+  getAcceptedLawyers {
+    id
+    name
+    image
+    bio
+    expertise
+    location
+    description
+    experience
+    fee
+    casesHandled
+    createdAt
+  }
+}
+`
+
+export const GET_LAWYER_BY_ID = gql`
+query GET_LAWYER_BY_ID($lawyerId: String!){
+  getLawyerById(lawyerId: $lawyerId) {
+     id
+    name
+    image
+    bio
+    expertise
+    location
+    description
+    experience
+    fee
+    casesHandled
+    createdAt
+  }
+}
+`
