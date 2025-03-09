@@ -159,16 +159,22 @@ const Signup: React.FC = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="bg-white p-6 shadow-lg rounded-lg w-96">
-        <h2 className="text-2xl font-bold mb-4">Sign Up</h2>
-        <div className="flex justify-between mb-4">
+    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+      <div className="bg-white p-8 shadow-2xl rounded-2xl w-full max-w-md">
+        <h2 className="text-3xl font-extrabold text-center text-gray-800 mb-6">
+          Sign Up
+        </h2>
+
+        {/* User/Lawyer Selection */}
+        <div className="flex mb-6 border border-gray-300 rounded-lg overflow-hidden">
           <button
             onClick={() => {
               setIsLawyer(false);
               setStep(1);
             }}
-            className={`w-1/2 py-2 ${!isLawyer ? "bg-blue-500 text-white" : "bg-gray-300"
+            className={`w-1/2 py-2 text-lg font-medium transition ${!isLawyer
+              ? "bg-blue-500 text-white"
+              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
               }`}
           >
             User
@@ -178,12 +184,16 @@ const Signup: React.FC = () => {
               setIsLawyer(true);
               setStep(1);
             }}
-            className={`w-1/2 py-2 ${isLawyer ? "bg-blue-500 text-white" : "bg-gray-300"
+            className={`w-1/2 py-2 text-lg font-medium transition ${isLawyer
+              ? "bg-blue-500 text-white"
+              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
               }`}
           >
             Lawyer
           </button>
         </div>
+
+        {/* Step 1: Common Form for Users and Lawyers */}
         {step === 1 && (
           <form
             onSubmit={
@@ -196,10 +206,10 @@ const Signup: React.FC = () => {
             }
           >
             <div className="mb-4">
-              <label className="block text-gray-700">Name</label>
+              <label className="block text-gray-700 font-medium">Name</label>
               <input
                 type="text"
-                className="w-full p-2 border rounded"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent"
                 name="name"
                 value={isLawyer ? lawyerData.name : userData.name}
                 onChange={handleChange}
@@ -208,10 +218,10 @@ const Signup: React.FC = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block text-gray-700">Email</label>
+              <label className="block text-gray-700 font-medium">Email</label>
               <input
                 type="email"
-                className="w-full p-2 border rounded"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent"
                 name="email"
                 value={isLawyer ? lawyerData.email : userData.email}
                 onChange={handleChange}
@@ -219,11 +229,11 @@ const Signup: React.FC = () => {
               />
             </div>
 
-            <div className="mb-4">
-              <label className="block text-gray-700">Password</label>
+            <div className="mb-6">
+              <label className="block text-gray-700 font-medium">Password</label>
               <input
                 type="password"
-                className="w-full p-2 border rounded"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent"
                 name="password"
                 value={isLawyer ? lawyerData.password : userData.password}
                 onChange={handleChange}
@@ -233,7 +243,9 @@ const Signup: React.FC = () => {
 
             <button
               type="submit"
-              className={`w-full py-2 rounded ${isLawyer ? "bg-gray-400" : "bg-blue-500 text-white"
+              className={`w-full py-2 text-lg font-semibold rounded-lg transition ${isLawyer
+                ? "bg-blue-500 text-white hover:bg-blue-600"
+                : "bg-blue-500 text-white hover:bg-blue-600"
                 }`}
               disabled={isLawyer && !isLawyerStep1Complete}
             >
@@ -241,21 +253,32 @@ const Signup: React.FC = () => {
             </button>
           </form>
         )}
+
+        {/* Step 2: Lawyer-Specific Fields */}
         {isLawyer && step === 2 && (
-          <form onSubmit={handleLawyerSignup}>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageUpload}
-              className="w-full p-2 border rounded mb-2"
-              required
-              multiple={false} // Ensure only one file is selected
-            />
-            {lawyerData.image && <img src={lawyerData.image} alt="Preview" className="mt-2 w-full h-32 object-cover rounded" />}
+          <form onSubmit={handleLawyerSignup} className="mt-4">
             <div className="mb-4">
-              <label className="block text-gray-700">Description</label>
+              <label className="block text-gray-700 font-medium">Profile Picture</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                required
+              />
+              {lawyerData.image && (
+                <img
+                  src={lawyerData.image}
+                  alt="Preview"
+                  className="mt-2 w-full h-40 object-cover rounded-lg shadow-md"
+                />
+              )}
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-gray-700 font-medium">Description</label>
               <textarea
-                className="w-full p-2 border rounded"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg"
                 name="description"
                 value={lawyerData.description}
                 onChange={handleChange}
@@ -264,9 +287,9 @@ const Signup: React.FC = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block text-gray-700">Bio</label>
+              <label className="block text-gray-700 font-medium">Bio</label>
               <textarea
-                className="w-full p-2 border rounded"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg"
                 name="bio"
                 value={lawyerData.bio}
                 onChange={handleChange}
@@ -275,10 +298,10 @@ const Signup: React.FC = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block text-gray-700">Location</label>
+              <label className="block text-gray-700 font-medium">Location</label>
               <input
                 type="text"
-                className="w-full p-2 border rounded"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg"
                 name="location"
                 value={lawyerData.location}
                 onChange={handleChange}
@@ -286,55 +309,61 @@ const Signup: React.FC = () => {
               />
             </div>
 
-            <div className="mb-4">
-              <label className="block text-gray-700">Expertise</label>
-              <input
-                type="text"
-                className="w-full p-2 border rounded"
-                name="expertise"
-                value={lawyerData.expertise}
-                onChange={handleChange}
-                required
-              />
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              <div>
+                <label className="block text-gray-700 font-medium">Expertise</label>
+                <input
+                  type="text"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                  name="expertise"
+                  value={lawyerData.expertise}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-gray-700 font-medium">Experience (years)</label>
+                <input
+                  type="number"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                  name="experience"
+                  value={lawyerData.experience}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
             </div>
 
-            <div className="mb-4">
-              <label className="block text-gray-700">Experience (years)</label>
-              <input
-                type="number"
-                className="w-full p-2 border rounded"
-                name="experience"
-                value={lawyerData.experience}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700">Fees</label>
-              <input
-                type="number"
-                className="w-full p-2 border rounded"
-                name="fee"
-                value={lawyerData.fee}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700">Cases Handled</label>
-              <input
-                type="number"
-                className="w-full p-2 border rounded"
-                name="casesHandled"
-                value={lawyerData.casesHandled}
-                onChange={handleChange}
-                required
-              />
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              <div>
+                <label className="block text-gray-700 font-medium">Fees</label>
+                <input
+                  type="number"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                  name="fee"
+                  value={lawyerData.fee}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-gray-700 font-medium">Cases Handled</label>
+                <input
+                  type="number"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                  name="casesHandled"
+                  value={lawyerData.casesHandled}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
             </div>
 
             <button
               type="submit"
-              className="w-full bg-green-500 text-white py-2 rounded"
+              className="w-full bg-green-500 text-white py-2 text-lg font-semibold rounded-lg hover:bg-green-600 transition"
             >
               Sign Up as Lawyer
             </button>
@@ -343,6 +372,7 @@ const Signup: React.FC = () => {
       </div>
     </div>
   );
+
 };
 
 export default Signup;
