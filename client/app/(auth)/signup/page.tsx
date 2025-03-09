@@ -6,6 +6,7 @@ import Cookies from "js-cookie";
 import { USER_SIGNUP, LAWYER_SIGNUP } from "@/graphql/mutations";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { v4 as uuidv4 } from "uuid";
 
 type UserSignupInputs = {
   name: string;
@@ -83,15 +84,29 @@ const Signup: React.FC = () => {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    // Check file size (max 200KB)
+    if (file.size > 200 * 1024) {
+      alert("Image must be less than 200KB!");
+      return;
+    }
+
     const formData = new FormData();
     formData.append("file", file);
     formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+
+    // Generate a unique filename using UUID
+    const uniqueFilename = uuidv4();
+    formData.append("public_id", uniqueFilename); // Store the image name as UUID
+
+    // Upload image without transformations (save credits)
+    formData.append("folder", "lawyer_images"); // Optional: Store in a specific folder
 
     try {
       const response = await axios.post(
         `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
         formData
       );
+
       setLawyerData((prev) => ({ ...prev, image: response.data.secure_url }));
       alert("Image uploaded successfully!");
     } catch (err) {
@@ -99,6 +114,7 @@ const Signup: React.FC = () => {
       alert("Image upload failed. Please try again.");
     }
   };
+
 
   const handleUserSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -227,7 +243,14 @@ const Signup: React.FC = () => {
         )}
         {isLawyer && step === 2 && (
           <form onSubmit={handleLawyerSignup}>
-            <input type="file" accept="image/*" onChange={handleImageUpload} className="w-full p-2 border rounded mb-2" required />
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+              className="w-full p-2 border rounded mb-2"
+              required
+              multiple={false} // Ensure only one file is selected
+            />
             {lawyerData.image && <img src={lawyerData.image} alt="Preview" className="mt-2 w-full h-32 object-cover rounded" />}
             <div className="mb-4">
               <label className="block text-gray-700">Description</label>
