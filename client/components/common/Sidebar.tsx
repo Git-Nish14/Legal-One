@@ -13,60 +13,84 @@ export default function Sidebar() {
     fetchPolicy: "network-only", // Always fetch fresh data from API
   });
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error loading data</p>;
+  if (loading) return <p className="text-white p-4">Loading...</p>;
+  if (error) return <p className="text-red-500 p-4">Error loading data</p>;
 
   const user = data?.getData;
+  const userName = user?.name || "User";
+  const userRole = user?.role || "GUEST";
 
-  // Logout function to remove the Authorization cookie and redirect to login
+  // Get greeting based on time
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Good Morning";
+    if (hour < 18) return "Good Afternoon";
+    return "Good Evening";
+  };
+
+  // Logout function
   const handleLogout = () => {
-    Cookies.remove("Authorization"); // Remove the cookie
+    Cookies.remove("Authorization");
     client.clearStore();
-    router.push("/signin"); // Redirect to login page
+    router.push("/signin");
   };
 
   return (
-    <div className="w-64 bg-gray-800 text-white h-full p-4 flex flex-col justify-between">
+    <div className="w-64 bg-gray-900 text-white h-full p-6 flex flex-col justify-between shadow-lg">
       <div>
-        <h2 className="text-xl font-bold mb-4">Dashboard</h2>
-        <ul>
+        {/* User Greeting */}
+        <div className="mb-6">
+          <h2 className="text-lg font-semibold">{getGreeting()},</h2>
+          <p className="text-xl font-bold">{userName}!</p>
+          <span className="text-sm text-gray-400 capitalize">({userRole.toLowerCase()})</span>
+        </div>
 
-          {/* User-Specific Sidebar */}
+        {/* Navigation Links */}
+        <ul className="space-y-3">
           {user?.role === "USER" && (
             <>
-              <li className={`mb-2 ${pathname === "/home/explore" ? "font-bold" : ""}`}>
-                <Link href="/home/explore">Explore</Link>
+              <li>
+                <Link href="/home/explore" className={`block px-3 py-2 rounded-md hover:bg-gray-700 ${pathname.startsWith("/home/explore") ? "bg-gray-700" : ""}`}>
+                  Explore
+                </Link>
               </li>
-              <li className={`mb-2 ${pathname === "/home/sessions" ? "font-bold" : ""}`}>
-                <Link href="/home/sessions">My Sessions</Link>
+              <li>
+                <Link href="/home/sessions" className={`block px-3 py-2 rounded-md hover:bg-gray-700 ${pathname.startsWith("/home/sessions") ? "bg-gray-700" : ""}`}>
+                  My Sessions
+                </Link>
               </li>
             </>
           )}
 
-          {/* Lawyer-Specific Sidebar */}
           {user?.role === "LAWYER" && (
             <>
-              <li className={`mb-2 ${pathname === "/home/requests" ? "font-bold" : ""}`}>
-                <Link href="/home/requests">Requests</Link>
+              <li>
+                <Link href="/home/requests" className={`block px-3 py-2 rounded-md hover:bg-gray-700 ${pathname.startsWith("/home/requests") ? "bg-gray-700" : ""}`}>
+                  Requests
+                </Link>
               </li>
-              <li className={`mb-2 ${pathname === "/home/sessions" ? "font-bold" : ""}`}>
-                <Link href="/home/sessions">My Sessions</Link>
+              <li>
+                <Link href="/home/sessions" className={`block px-3 py-2 rounded-md hover:bg-gray-700 ${pathname.startsWith("/home/sessions") ? "bg-gray-700" : ""}`}>
+                  My Sessions
+                </Link>
               </li>
             </>
           )}
 
-          {/* Admin-Specific Sidebar */}
           {user?.role === "ADMIN" && (
             <>
-              <li className={`mb-2 ${pathname === "/home/lawyers" ? "font-bold" : ""}`}>
-                <Link href="/home/lawyers">Manage Lawyers</Link>
+              <li>
+                <Link href="/home/lawyers" className={`block px-3 py-2 rounded-md hover:bg-gray-700 ${pathname.startsWith("/home/lawyers") ? "bg-gray-700" : ""}`}>
+                  Manage Lawyers
+                </Link>
               </li>
             </>
           )}
 
-          {/* Common for all users */}
-          <li className={`mb-2 ${pathname === "/home/profile" ? "font-bold" : ""}`}>
-            <Link href="/home/profile">Profile</Link>
+          <li>
+            <Link href="/home/profile" className={`block px-3 py-2 rounded-md hover:bg-gray-700 ${pathname.startsWith("/home/profile") ? "bg-gray-700" : ""}`}>
+              Profile
+            </Link>
           </li>
         </ul>
       </div>
@@ -74,7 +98,7 @@ export default function Sidebar() {
       {/* Logout Button */}
       <button
         onClick={handleLogout}
-        className="mt-4 p-2 bg-red-600 text-white rounded w-full hover:bg-red-700"
+        className="mt-6 p-2 bg-red-600 text-white rounded-md w-full hover:bg-red-700 transition"
       >
         Logout
       </button>

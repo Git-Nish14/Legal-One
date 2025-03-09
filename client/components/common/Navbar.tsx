@@ -10,60 +10,61 @@ export default function Navbar() {
         fetchPolicy: "network-only", // Always fetch fresh data from API
     });
 
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error loading data</p>;
+    if (loading) return <p className="text-white p-4">Loading...</p>;
+    if (error) return <p className="text-red-500 p-4">Error loading data</p>;
 
     const user = data?.getData;
 
     return (
-        <nav className="bg-gray-800 text-white p-4 flex justify-around">
-            {/* User & Lawyer Navigation */}
-            {(user?.role === "USER" || user?.role === "LAWYER") && (
-                <>
-                    <Link
-                        href="/home/sessions/active"
-                        className={`p-2 ${pathname === "/home/sessions/active" ? "font-bold" : ""}`}
-                    >
-                        Active
-                    </Link>
-                    <Link
-                        href="/home/sessions/completed"
-                        className={`p-2 ${pathname === "/home/sessions/completed" ? "font-bold" : ""}`}
-                    >
-                        Completed
-                    </Link>
-                    <Link
-                        href="/home/sessions/rejected"
-                        className={`p-2 ${pathname === "/home/sessions/rejected" ? "font-bold" : ""}`}
-                    >
-                        Rejected
-                    </Link>
-                </>
-            )}
+        <nav className="bg-gray-900 text-white p-5 shadow-md">
+            <div className="max-w-6xl mx-auto flex justify-center items-center space-x-8">
+                {/* User & Lawyer Navigation */}
+                {(user?.role === "USER" || user?.role === "LAWYER") && (
+                    <>
+                        <NavLink href="/home/sessions/active" pathname={pathname}>
+                            Active
+                        </NavLink>
+                        <NavLink href="/home/sessions/completed" pathname={pathname}>
+                            Completed
+                        </NavLink>
+                        <NavLink href="/home/sessions/rejected" pathname={pathname}>
+                            Rejected
+                        </NavLink>
+                    </>
+                )}
 
-            {/* Admin Navigation */}
-            {user?.role === "ADMIN" && (
-                <>
-                    <Link
-                        href="/home/lawyers/pending"
-                        className={`p-2 ${pathname === "/home/lawyers/pending" ? "font-bold" : ""}`}
-                    >
-                        Pending
-                    </Link>
-                    <Link
-                        href="/home/lawyers/accepted"
-                        className={`p-2 ${pathname === "/home/lawyers/accepted" ? "font-bold" : ""}`}
-                    >
-                        Accepted
-                    </Link>
-                    <Link
-                        href="/home/lawyers/blocked"
-                        className={`p-2 ${pathname === "/home/lawyers/blocked" ? "font-bold" : ""}`}
-                    >
-                        Blocked
-                    </Link>
-                </>
-            )}
+                {/* Admin Navigation */}
+                {user?.role === "ADMIN" && (
+                    <>
+                        <NavLink href="/home/lawyers/pending" pathname={pathname}>
+                            Pending
+                        </NavLink>
+                        <NavLink href="/home/lawyers/accepted" pathname={pathname}>
+                            Accepted
+                        </NavLink>
+                        <NavLink href="/home/lawyers/blocked" pathname={pathname}>
+                            Blocked
+                        </NavLink>
+                    </>
+                )}
+            </div>
         </nav>
+    );
+}
+
+interface NavLinkProps {
+    href: string;
+    pathname: string;
+    children: React.ReactNode;
+}
+
+function NavLink({ href, pathname, children }: NavLinkProps) {
+    return (
+        <Link
+            href={href}
+            className={`px-6 py-3 rounded-lg transition duration-300 text-lg font-medium ${pathname.startsWith(href) ? "bg-blue-600 text-white shadow-lg" : "hover:bg-gray-700 hover:text-gray-300"}`}
+        >
+            {children}
+        </Link>
     );
 }
