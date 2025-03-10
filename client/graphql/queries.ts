@@ -1,4 +1,5 @@
 import { gql } from "@apollo/client";
+import exp from "constants";
 
 export const GET_DATA = gql`
   query getdata {
@@ -273,3 +274,26 @@ export const GET_CHAT_BY_SESSION = gql`
     }
   }
 `;
+
+export const GET_SESSION_BY_ID = gql`
+  query GET_SESSION_BY_ID($sessionId: String!){
+  getSessionById(sessionId: $sessionId) {
+    id
+    title
+    description
+    status
+    userCompleted
+    lawyerCompleted
+    user {
+      id
+      name
+    }
+    lawyer {
+      id
+      name
+      expertise
+      image
+    }
+  }
+}
+  `;
