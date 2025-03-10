@@ -1,10 +1,9 @@
-"use client";
-
 import { useState, useEffect, useRef } from "react";
 import { gql, useQuery, useMutation, useSubscription } from "@apollo/client";
 import { GET_CHAT_BY_SESSION } from "@/graphql/queries";
 import { SEND_MESSAGE } from "@/graphql/mutations";
 import { NEW_MESSAGE_SUBSCRIPTION } from "@/graphql/subscriptions";
+import { GET_SESSION_BY_ID } from "@/graphql/queries"; // Import session query
 
 interface ChatboxProps {
     sessionId: string;
@@ -14,6 +13,14 @@ export default function Chatbox({ sessionId }: ChatboxProps) {
     const [message, setMessage] = useState("");
     const [messages, setMessages] = useState<any[]>([]);
     const messagesEndRef = useRef<HTMLDivElement>(null);
+
+    // Fetch session status
+    const { data: sessionData } = useQuery(GET_SESSION_BY_ID, {
+        variables: { sessionId },
+    });
+
+    const sessionStatus = sessionData?.getSessionById?.status;
+    const isSessionCompleted = sessionStatus === "COMPLETED";
 
     // Fetch existing chat
     const { data, loading, error } = useQuery(GET_CHAT_BY_SESSION, {
@@ -89,8 +96,7 @@ export default function Chatbox({ sessionId }: ChatboxProps) {
                 {messages.map((msg) => (
                     <div
                         key={msg.id || Math.random()}
-                        className={`p-2 rounded-lg max-w-xs text-sm break-words w-fit ${msg.senderUser ? "bg-white text-black ml-auto rounded-br-none" : "bg-green-500 text-white mr-auto rounded-bl-none"
-                            }`}
+                        className={`p-2 rounded-lg max-w-xs text-sm break-words w-fit ${msg.senderUser ? "bg-white text-black ml-auto rounded-br-none" : "bg-green-500 text-white mr-auto rounded-bl-none"}`}
                         style={{ maxWidth: "80%" }}
                     >
                         <strong className="text-xs block mb-1">
@@ -102,23 +108,25 @@ export default function Chatbox({ sessionId }: ChatboxProps) {
                 <div ref={messagesEndRef} />
             </div>
 
-            {/* Input Box */}
-            <div className="flex items-center gap-2 p-3 bg-white border-t rounded-b-md">
-                <input
-                    type="text"
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    className="flex-1 p-2 border rounded-full text-sm focus:outline-none"
-                    placeholder="Type a message..."
-                />
-                <button
-                    onClick={handleSendMessage}
-                    className="bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600"
-                >
-                    Send
-                </button>
-            </div>
+            {/* Input Box - Disabled if session is completed */}
+            {!isSessionCompleted && (
+                <div className="flex items-center gap-2 p-3 bg-white border-t rounded-b-md">
+                    <input
+                        type="text"
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                        className="flex-1 p-2 border rounded-full text-sm focus:outline-none"
+                        placeholder="Type a message..."
+                    />
+                    <button
+                        onClick={handleSendMessage}
+                        className="bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600"
+                    >
+                        Send
+                    </button>
+                </div>
+            )}
         </div>
     );
 }
