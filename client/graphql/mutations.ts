@@ -47,3 +47,21 @@ export const SIGNIN = gql`
     }
   }
 `;
+
+export const CREATE_SESSION = gql`
+  mutation CREATE_SESSION(
+    $description: String!
+    $title: String!
+    $lawyerId: String!
+  ) {
+    createSession(
+      description: $description
+      title: $title
+      lawyerId: $lawyerId
+    ) {
+      title
+      description
+      id
+    }
+  }
+`;
