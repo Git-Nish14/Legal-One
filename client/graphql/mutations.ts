@@ -114,3 +114,21 @@ export const UPDATE_LAWYER_PROFILE = gql`
     }
   }
 `;
+
+export const SEND_MESSAGE = gql`
+  mutation SendMessage($chatId: String!, $content: String!) {
+    sendMessage(chatId: $chatId, content: $content) {
+      id
+      content
+      senderUser {
+        id
+        name
+      }
+      senderLawyer {
+        id
+        name
+      }
+      sentAt
+    }
+  }
+`;

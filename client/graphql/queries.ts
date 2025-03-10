@@ -244,3 +244,32 @@ export const GET_PENDING_SESSIONS = gql`
     }
   }
 `;
+
+export const GET_CHAT_BY_SESSION = gql`
+  query GetChatBySession($sessionId: String!) {
+    getChatBySession(sessionId: $sessionId) {
+      id
+      user {
+        id
+        name
+      }
+      lawyer {
+        id
+        name
+      }
+      messages {
+        id
+        content
+        senderUser {
+          id
+          name
+        }
+        senderLawyer {
+          id
+          name
+        }
+        sentAt
+      }
+    }
+  }
+`;

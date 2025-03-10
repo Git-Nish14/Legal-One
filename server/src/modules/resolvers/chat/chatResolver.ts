@@ -13,7 +13,16 @@ export class ChatResolver {
   ): Promise<Chat | null> {
     return prisma.chat.findUnique({
       where: { sessionId },
-      include: { messages: true, user: true, lawyer: true },
+      include: {
+        messages: {
+          include: {
+            senderUser: { select: { id: true, name: true } }, // Include sender user
+            senderLawyer: { select: { id: true, name: true } }, // Include sender lawyer
+          },
+        },
+        user: { select: { id: true, name: true } },
+        lawyer: { select: { id: true, name: true } },
+      },
     }) as any as Chat;
   }
 

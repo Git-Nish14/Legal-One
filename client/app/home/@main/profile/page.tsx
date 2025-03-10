@@ -1,73 +1,9 @@
 "use client";
+import { UPDATE_LAWYER_PROFILE } from "@/graphql/mutations";
+import { GET_DATA } from "@/graphql/queries";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-
-export const GET_DATA = gql`
-  query getdata {
-    getData {
-      ... on User {
-        id
-        name
-        email
-        role
-      }
-      ... on Lawyer {
-        id
-        name
-        email
-        role
-        fee
-        experience
-        expertise
-        casesHandled
-        approvalStatus
-        location
-        bio
-        description
-      }
-      ... on Admin {
-        id
-        name
-        email
-        role
-      }
-    }
-  }
-`;
-
-export const UPDATE_LAWYER_PROFILE = gql`
-  mutation UPDATE_LAWYER_PROFILE(
-    $fee: Float!
-    $experience: Float!
-    $expertise: String!
-    $location: String!
-    $bio: String!
-    $description: String!
-    $casesHandled: Float!
-  ) {
-    updateLawyerProfile(
-      fee: $fee
-      experience: $experience
-      expertise: $expertise
-      location: $location
-      bio: $bio
-      description: $description
-      casesHandled: $casesHandled
-    ) {
-      id
-      name
-      fee
-      experience
-      expertise
-      location
-      bio
-      description
-      casesHandled
-      updatedAt
-    }
-  }
-`;
 
 const ProfilePage = () => {
   const { data, loading, error } = useQuery(GET_DATA);

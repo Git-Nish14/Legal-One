@@ -112,7 +112,7 @@ const SessionCard: React.FC<{ session: Session }> = ({ session }) => {
         {/* View Details Button */}
         {(userRole === "USER" || userRole === "LAWYER") &&
           (session.status === "ACTIVE" || session.status === "COMPLETED") && (
-            <Link href={`/home/explore/session/${session.id}`} passHref>
+            <Link href={`/home/session/${session.id}`} passHref>
               <button className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition mt-4">
                 View Details
               </button>
