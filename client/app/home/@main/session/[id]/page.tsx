@@ -1,7 +1,7 @@
 "use client";
 
 import Chatbox from "@/components/common/Chatbox";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 
 export default function ChatPage() {
     const { id } = useParams() as { id: string };
