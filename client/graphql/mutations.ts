@@ -132,3 +132,19 @@ export const SEND_MESSAGE = gql`
     }
   }
 `;
+
+export const UPDATE_USER_COMPLETED = gql`
+mutation UPDATE_USER_COMPLETED($sessionId: String!){
+  updateUserCompleted(sessionId: $sessionId) {
+    id
+  }
+}
+`;
+
+export const UPDATE_LAWYER_COMPLETED = gql`
+mutation UPDATE_LAWYER_COMPLETED($sessionId: String!){
+  updateLawyerCompleted(sessionId: $sessionId) {
+    id
+  }
+}
+`;

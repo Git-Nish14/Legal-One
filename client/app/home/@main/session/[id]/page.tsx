@@ -1,10 +1,13 @@
 "use client";
 
-import { gql, useQuery } from "@apollo/client";
+import { gql, useQuery, useMutation } from "@apollo/client";
 import Chatbox from "@/components/common/Chatbox";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { GET_DATA, GET_SESSION_BY_ID } from "@/graphql/queries";
+
+// Import Mutations
+import { UPDATE_USER_COMPLETED, UPDATE_LAWYER_COMPLETED } from "@/graphql/mutations";
 
 export default function ChatPage() {
     const { id } = useParams() as { id: string };
@@ -15,9 +18,20 @@ export default function ChatPage() {
     const { data: userData, loading: userLoading, error: userError } = useQuery(GET_DATA);
 
     // Fetch Session Data
-    const { data: sessionData, loading: sessionLoading, error: sessionError } = useQuery(GET_SESSION_BY_ID, {
+    const { data: sessionData, loading: sessionLoading, error: sessionError, refetch } = useQuery(GET_SESSION_BY_ID, {
         variables: { sessionId },
         skip: !sessionId,
+    });
+
+    // Mutations for updating completion status
+    const [updateUserCompleted, { loading: userCompleteLoading }] = useMutation(UPDATE_USER_COMPLETED, {
+        variables: { sessionId },
+        onCompleted: () => refetch(),
+    });
+
+    const [updateLawyerCompleted, { loading: lawyerCompleteLoading }] = useMutation(UPDATE_LAWYER_COMPLETED, {
+        variables: { sessionId },
+        onCompleted: () => refetch(),
     });
 
     if (!sessionId) return <p>Session ID is required</p>;
@@ -41,10 +55,22 @@ export default function ChatPage() {
         return <p className="text-red-500 text-center mt-10">Access Denied: You are not part of this session.</p>;
     }
 
-    // Determine which details to show based on role
+    // Determine role-based details
     const isLawyer = currentUser?.role === "LAWYER";
     const isUser = currentUser?.role === "USER";
     const otherParty = isLawyer ? sessionUser : sessionLawyer;
+
+    // Handle completion button click
+    const handleCompletion = async () => {
+        const confirm = window.confirm("Are you sure? This action cannot be undone.");
+        if (!confirm) return;
+
+        if (isUser) {
+            await updateUserCompleted();
+        } else if (isLawyer) {
+            await updateLawyerCompleted();
+        }
+    };
 
     return (
         <div className="flex h-screen">
@@ -87,8 +113,17 @@ export default function ChatPage() {
                 </div>
 
                 {/* Complete Button */}
-                <button className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-                    Mark as Completed
+                <button
+                    className={`mt-4 px-4 py-2 rounded text-white ${session?.userCompleted && isUser || session?.lawyerCompleted && isLawyer
+                            ? "bg-gray-400 cursor-not-allowed"
+                            : "bg-blue-600 hover:bg-blue-700"
+                        }`}
+                    onClick={handleCompletion}
+                    disabled={
+                        (isUser && session?.userCompleted) || (isLawyer && session?.lawyerCompleted) || userCompleteLoading || lawyerCompleteLoading
+                    }
+                >
+                    {userCompleteLoading || lawyerCompleteLoading ? "Processing..." : "Mark as Completed"}
                 </button>
             </div>
 
