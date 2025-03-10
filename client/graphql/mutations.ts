@@ -73,3 +73,44 @@ export const UPDATE_SESSION_STATUS = gql`
     }
   }
 `;
+
+export const UPDATE_LAWYER_STATUS = gql`
+  mutation UPDATE_LAWYER_STATUS($status: ApprovalStatus!, $lawyerId: String!) {
+    updateLawyerStatus(status: $status, lawyerId: $lawyerId) {
+      id
+    }
+  }
+`;
+
+export const UPDATE_LAWYER_PROFILE = gql`
+  mutation UPDATE_LAWYER_PROFILE(
+    $fee: Float
+    $experience: Float
+    $expertise: String
+    $location: String
+    $bio: String
+    $description: String
+    $casesHandled: Float
+  ) {
+    updateLawyerProfile(
+      fee: $fee
+      experience: $experience
+      expertise: $expertise
+      location: $location
+      bio: $bio
+      description: $description
+      casesHandled: $casesHandled
+    ) {
+      id
+      name
+      fee
+      experience
+      expertise
+      location
+      bio
+      description
+      casesHandled
+      updatedAt
+    }
+  }
+`;

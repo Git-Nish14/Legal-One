@@ -88,6 +88,45 @@ export const GET_ACCEPTED_LAWYERS = gql`
       expertise
       location
       description
+      approvalStatus
+      experience
+      fee
+      casesHandled
+      createdAt
+    }
+  }
+`;
+
+export const GET_BLOCKED_LAWYERS = gql`
+  query GET_BLOCKED_LAWYERS {
+    getBlockedLawyers {
+      id
+      name
+      image
+      bio
+      expertise
+      location
+      description
+      approvalStatus
+      experience
+      fee
+      casesHandled
+      createdAt
+    }
+  }
+`;
+
+export const GET_PENDING_LAWYERS = gql`
+  query GET_PENDING_LAWYERS {
+    getPendingLawyers {
+      id
+      name
+      image
+      bio
+      expertise
+      location
+      description
+      approvalStatus
       experience
       fee
       casesHandled

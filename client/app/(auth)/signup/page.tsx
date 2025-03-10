@@ -27,7 +27,8 @@ type LawyerSignupInputs = UserSignupInputs & {
 
 const Signup: React.FC = () => {
   const CLOUDINARY_CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME!;
-  const CLOUDINARY_UPLOAD_PRESET = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!;
+  const CLOUDINARY_UPLOAD_PRESET =
+    process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!;
 
   const [isLawyer, setIsLawyer] = useState<boolean>(false);
   const [step, setStep] = useState<number>(1);
@@ -115,7 +116,6 @@ const Signup: React.FC = () => {
     }
   };
 
-
   const handleUserSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -172,10 +172,11 @@ const Signup: React.FC = () => {
               setIsLawyer(false);
               setStep(1);
             }}
-            className={`w-1/2 py-2 text-lg font-medium transition ${!isLawyer
-              ? "bg-blue-500 text-white"
-              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-              }`}
+            className={`w-1/2 py-2 text-lg font-medium transition ${
+              !isLawyer
+                ? "bg-blue-500 text-white"
+                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+            }`}
           >
             User
           </button>
@@ -184,10 +185,11 @@ const Signup: React.FC = () => {
               setIsLawyer(true);
               setStep(1);
             }}
-            className={`w-1/2 py-2 text-lg font-medium transition ${isLawyer
-              ? "bg-blue-500 text-white"
-              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-              }`}
+            className={`w-1/2 py-2 text-lg font-medium transition ${
+              isLawyer
+                ? "bg-blue-500 text-white"
+                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+            }`}
           >
             Lawyer
           </button>
@@ -199,9 +201,9 @@ const Signup: React.FC = () => {
             onSubmit={
               isLawyer
                 ? (e) => {
-                  e.preventDefault();
-                  setStep(2);
-                }
+                    e.preventDefault();
+                    setStep(2);
+                  }
                 : handleUserSignup
             }
           >
@@ -224,13 +226,18 @@ const Signup: React.FC = () => {
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent"
                 name="email"
                 value={isLawyer ? lawyerData.email : userData.email}
-                onChange={handleChange}
+                onChange={(e) => {
+                  e.target.value = e.target.value.toLowerCase();
+                  handleChange(e);
+                }}
                 required
               />
             </div>
 
             <div className="mb-6">
-              <label className="block text-gray-700 font-medium">Password</label>
+              <label className="block text-gray-700 font-medium">
+                Password
+              </label>
               <input
                 type="password"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent"
@@ -243,10 +250,11 @@ const Signup: React.FC = () => {
 
             <button
               type="submit"
-              className={`w-full py-2 text-lg font-semibold rounded-lg transition ${isLawyer
-                ? "bg-blue-500 text-white hover:bg-blue-600"
-                : "bg-blue-500 text-white hover:bg-blue-600"
-                }`}
+              className={`w-full py-2 text-lg font-semibold rounded-lg transition ${
+                isLawyer
+                  ? "bg-blue-500 text-white hover:bg-blue-600"
+                  : "bg-blue-500 text-white hover:bg-blue-600"
+              }`}
               disabled={isLawyer && !isLawyerStep1Complete}
             >
               {isLawyer ? "Next" : "Sign Up"}
@@ -258,7 +266,9 @@ const Signup: React.FC = () => {
         {isLawyer && step === 2 && (
           <form onSubmit={handleLawyerSignup} className="mt-4">
             <div className="mb-4">
-              <label className="block text-gray-700 font-medium">Profile Picture</label>
+              <label className="block text-gray-700 font-medium">
+                Profile Picture
+              </label>
               <input
                 type="file"
                 accept="image/*"
@@ -276,7 +286,9 @@ const Signup: React.FC = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block text-gray-700 font-medium">Description</label>
+              <label className="block text-gray-700 font-medium">
+                Description
+              </label>
               <textarea
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg"
                 name="description"
@@ -298,7 +310,9 @@ const Signup: React.FC = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block text-gray-700 font-medium">Location</label>
+              <label className="block text-gray-700 font-medium">
+                Location
+              </label>
               <input
                 type="text"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg"
@@ -311,7 +325,9 @@ const Signup: React.FC = () => {
 
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div>
-                <label className="block text-gray-700 font-medium">Expertise</label>
+                <label className="block text-gray-700 font-medium">
+                  Expertise
+                </label>
                 <input
                   type="text"
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg"
@@ -323,7 +339,9 @@ const Signup: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-gray-700 font-medium">Experience (years)</label>
+                <label className="block text-gray-700 font-medium">
+                  Experience (years)
+                </label>
                 <input
                   type="number"
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg"
@@ -349,7 +367,9 @@ const Signup: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-gray-700 font-medium">Cases Handled</label>
+                <label className="block text-gray-700 font-medium">
+                  Cases Handled
+                </label>
                 <input
                   type="number"
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg"
@@ -372,7 +392,6 @@ const Signup: React.FC = () => {
       </div>
     </div>
   );
-
 };
 
 export default Signup;

@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { SIGNIN } from "@/graphql/mutations";
 import { useRouter } from "next/navigation";
+
 type SignInFormInputs = {
   email: string;
   password: string;
@@ -20,12 +21,16 @@ const SignIn: React.FC = () => {
 
   const onSubmit: SubmitHandler<SignInFormInputs> = async (data) => {
     try {
-      const response = await signIn({ variables: data });
+      const formattedData = {
+        ...data,
+        email: data.email.toLowerCase(), // Convert email to lowercase
+      };
+
+      const response = await signIn({ variables: formattedData });
 
       if (response.data?.signIn?.token) {
         const bearerToken = `Bearer ${response.data.signIn.token}`;
         Cookies.set("Authorization", bearerToken, { expires: 7 });
-        // alert("Sign-in successful!");
         console.log("Token stored in cookies:", bearerToken);
         router.push("/home");
       }
@@ -44,7 +49,9 @@ const SignIn: React.FC = () => {
           Sign In
         </h2>
 
-        {error && <p className="text-red-500 text-center mb-4">{error.message}</p>}
+        {error && (
+          <p className="text-red-500 text-center mb-4">{error.message}</p>
+        )}
 
         <div className="mb-5">
           <label className="block text-gray-700 font-medium mb-1">Email</label>
@@ -52,6 +59,11 @@ const SignIn: React.FC = () => {
             type="email"
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
             {...register("email", { required: "Email is required" })}
+            onInput={(e) =>
+              ((e.target as HTMLInputElement).value = (
+                e.target as HTMLInputElement
+              ).value.toLowerCase())
+            }
           />
           {errors.email && (
             <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
@@ -59,14 +71,18 @@ const SignIn: React.FC = () => {
         </div>
 
         <div className="mb-5">
-          <label className="block text-gray-700 font-medium mb-1">Password</label>
+          <label className="block text-gray-700 font-medium mb-1">
+            Password
+          </label>
           <input
             type="password"
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
             {...register("password", { required: "Password is required" })}
           />
           {errors.password && (
-            <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
+            <p className="text-red-500 text-sm mt-1">
+              {errors.password.message}
+            </p>
           )}
         </div>
 
@@ -80,7 +96,6 @@ const SignIn: React.FC = () => {
       </form>
     </div>
   );
-
 };
 
 export default SignIn;
