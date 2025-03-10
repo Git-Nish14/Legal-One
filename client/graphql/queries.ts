@@ -125,6 +125,9 @@ export const GET_ACTIVE_SESSIONS = gql`
       title
       updatedAt
       userCompleted
+      user {
+        name
+      }
       lawyer {
         name
         image
@@ -145,6 +148,9 @@ export const GET_COMPLETED_SESSIONS = gql`
       title
       updatedAt
       userCompleted
+      user {
+        name
+      }
       lawyer {
         name
         image
@@ -165,6 +171,9 @@ export const GET_REJECTED_SESSIONS = gql`
       title
       updatedAt
       userCompleted
+      user {
+        name
+      }
       lawyer {
         name
         image
@@ -185,6 +194,9 @@ export const GET_PENDING_SESSIONS = gql`
       title
       updatedAt
       userCompleted
+      user {
+        name
+      }
       lawyer {
         name
         image

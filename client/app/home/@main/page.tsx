@@ -5,26 +5,26 @@ import { GET_DATA } from "@/graphql/queries";
 import { useRouter } from "next/navigation";
 
 export default function HomePage() {
-    const router = useRouter();
-    const { data, loading, error } = useQuery(GET_DATA, {
-        fetchPolicy: "network-only", // Always fetch fresh data from API
-    });
+  const router = useRouter();
+  const { data, loading, error } = useQuery(GET_DATA, {
+    fetchPolicy: "network-only", // Always fetch fresh data from API
+  });
 
-    useEffect(() => {
-        if (!loading && data) {
-            const user = data?.getData;
-            if (user?.role === "USER") {
-                router.replace("/home/explore");
-            } else if (user?.role === "LAWYER") {
-                router.replace("/home/requests");
-            } else if (user?.role === "ADMIN") {
-                router.replace("/home/lawyers");
-            }
-        }
-    }, [data, loading, router]);
+  useEffect(() => {
+    if (!loading && data) {
+      const user = data?.getData;
+      if (user?.role === "USER") {
+        router.replace("/home/explore");
+      } else if (user?.role === "LAWYER") {
+        router.replace("/home/sessions");
+      } else if (user?.role === "ADMIN") {
+        router.replace("/home/lawyers");
+      }
+    }
+  }, [data, loading, router]);
 
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error loading data</p>;
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error loading data</p>;
 
-    return null; // Since we are redirecting, no UI is needed
+  return null; // Since we are redirecting, no UI is needed
 }

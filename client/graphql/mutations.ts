@@ -65,3 +65,11 @@ export const CREATE_SESSION = gql`
     }
   }
 `;
+
+export const UPDATE_SESSION_STATUS = gql`
+  mutation UPDATE_SESSION_STATUS($status: SessionStatus!, $sessionId: String!) {
+    updateSessionStatus(status: $status, sessionId: $sessionId) {
+      id
+    }
+  }
+`;

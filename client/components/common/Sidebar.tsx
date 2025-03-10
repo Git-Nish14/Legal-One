@@ -42,7 +42,9 @@ export default function Sidebar() {
         <div className="mb-6">
           <h2 className="text-lg font-semibold">{getGreeting()},</h2>
           <p className="text-xl font-bold">{userName}!</p>
-          <span className="text-sm text-gray-400 capitalize">({userRole.toLowerCase()})</span>
+          <span className="text-sm text-gray-400 capitalize">
+            ({userRole.toLowerCase()})
+          </span>
         </div>
 
         {/* Navigation Links */}
@@ -50,12 +52,22 @@ export default function Sidebar() {
           {user?.role === "USER" && (
             <>
               <li>
-                <Link href="/home/explore" className={`block px-3 py-2 rounded-md hover:bg-gray-700 ${pathname.startsWith("/home/explore") ? "bg-gray-700" : ""}`}>
+                <Link
+                  href="/home/explore"
+                  className={`block px-3 py-2 rounded-md hover:bg-gray-700 ${
+                    pathname.startsWith("/home/explore") ? "bg-gray-700" : ""
+                  }`}
+                >
                   Explore
                 </Link>
               </li>
               <li>
-                <Link href="/home/sessions" className={`block px-3 py-2 rounded-md hover:bg-gray-700 ${pathname.startsWith("/home/sessions") ? "bg-gray-700" : ""}`}>
+                <Link
+                  href="/home/sessions"
+                  className={`block px-3 py-2 rounded-md hover:bg-gray-700 ${
+                    pathname.startsWith("/home/sessions") ? "bg-gray-700" : ""
+                  }`}
+                >
                   My Sessions
                 </Link>
               </li>
@@ -65,12 +77,12 @@ export default function Sidebar() {
           {user?.role === "LAWYER" && (
             <>
               <li>
-                <Link href="/home/requests" className={`block px-3 py-2 rounded-md hover:bg-gray-700 ${pathname.startsWith("/home/requests") ? "bg-gray-700" : ""}`}>
-                  Requests
-                </Link>
-              </li>
-              <li>
-                <Link href="/home/sessions" className={`block px-3 py-2 rounded-md hover:bg-gray-700 ${pathname.startsWith("/home/sessions") ? "bg-gray-700" : ""}`}>
+                <Link
+                  href="/home/sessions"
+                  className={`block px-3 py-2 rounded-md hover:bg-gray-700 ${
+                    pathname.startsWith("/home/sessions") ? "bg-gray-700" : ""
+                  }`}
+                >
                   My Sessions
                 </Link>
               </li>
@@ -80,7 +92,12 @@ export default function Sidebar() {
           {user?.role === "ADMIN" && (
             <>
               <li>
-                <Link href="/home/lawyers" className={`block px-3 py-2 rounded-md hover:bg-gray-700 ${pathname.startsWith("/home/lawyers") ? "bg-gray-700" : ""}`}>
+                <Link
+                  href="/home/lawyers"
+                  className={`block px-3 py-2 rounded-md hover:bg-gray-700 ${
+                    pathname.startsWith("/home/lawyers") ? "bg-gray-700" : ""
+                  }`}
+                >
                   Manage Lawyers
                 </Link>
               </li>
@@ -88,7 +105,12 @@ export default function Sidebar() {
           )}
 
           <li>
-            <Link href="/home/profile" className={`block px-3 py-2 rounded-md hover:bg-gray-700 ${pathname.startsWith("/home/profile") ? "bg-gray-700" : ""}`}>
+            <Link
+              href="/home/profile"
+              className={`block px-3 py-2 rounded-md hover:bg-gray-700 ${
+                pathname.startsWith("/home/profile") ? "bg-gray-700" : ""
+              }`}
+            >
               Profile
             </Link>
           </li>

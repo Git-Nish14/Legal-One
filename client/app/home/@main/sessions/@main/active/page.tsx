@@ -6,7 +6,9 @@ import SessionCard from "@/components/common/SessionCard";
 import { GET_ACTIVE_SESSIONS } from "@/graphql/queries";
 
 export default function ActiveSessionsPage() {
-  const { loading, error, data } = useQuery(GET_ACTIVE_SESSIONS);
+  const { loading, error, data } = useQuery(GET_ACTIVE_SESSIONS, {
+    fetchPolicy: "network-only",
+  });
 
   if (loading)
     return <div className="text-center text-gray-700">Loading...</div>;
@@ -14,6 +16,12 @@ export default function ActiveSessionsPage() {
     return (
       <div className="text-center text-red-500">Error: {error.message}</div>
     );
+
+  if (!data || data.getActiveSessions.length === 0) {
+    return (
+      <div className="text-center text-gray-700">No sessions available</div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
