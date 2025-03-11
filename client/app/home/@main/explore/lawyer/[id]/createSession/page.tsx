@@ -3,18 +3,18 @@
 import React from "react";
 import { useQuery, useMutation } from "@apollo/client";
 import { useParams, useRouter } from "next/navigation";
-import { gql } from "@apollo/client";
 import Image from "next/image";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { GET_LAWYER_BY_ID } from "@/graphql/queries";
 import { CREATE_SESSION } from "@/graphql/mutations";
+import { ArrowLeft } from "lucide-react";
 
 interface FormData {
   title: string;
   description: string;
 }
 
-export default function Page() {
+export default function CreateSessionPage() {
   const { id: lawyerId } = useParams() as { id: string };
   const router = useRouter();
   const { loading, error, data } = useQuery(GET_LAWYER_BY_ID, {
@@ -52,32 +52,43 @@ export default function Page() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-lg p-6">
-        {lawyer && (
-          <>
-            <Image
-              src={lawyer.image}
-              alt={lawyer.name}
-              width={150}
-              height={150}
-              className="w-40 h-40 object-cover rounded-full mx-auto"
-              unoptimized
-            />
-            <h1 className="text-2xl font-bold text-center mt-4">
-              {lawyer.name}
-            </h1>
-            <p className="text-center text-gray-600">{lawyer.expertise}</p>
-            <p className="text-gray-700 mt-4">Fee- {lawyer.fee}</p>
-          </>
-        )}
+    <div className="min-h-screen flex ml-10 p-10 relative">
+      {/* Left Section - Lawyer Image */}
+      <div className="w-1/3 bg-yellow-400 flex justify-center items-center p-10 rounded-l-2xl">
+        <Image
+          src={lawyer.image}
+          alt={lawyer.name}
+          width={300}
+          height={300}
+          className="rounded-full object-cover w-64 h-64 border-8 border-white shadow-lg"
+          unoptimized
+        />
+      </div>
+
+      {/* Right Section - Form */}
+      <div className="w-2/3 p-16 bg-white shadow-md flex flex-col justify-center relative rounded-r-2xl">
+        {/* Back Button */}
+        <button
+          onClick={() => router.back()}
+          className="absolute top-6 right-6 flex items-center gap-2 bg-gray-200 px-4 py-2 rounded-md shadow hover:bg-gray-300 transition duration-200"
+        >
+          <ArrowLeft size={20} className="text-gray-700" />
+          <span className="text-gray-700 font-medium">Back</span>
+        </button>
+
+        <h1 className="text-4xl font-extrabold text-gray-900 text-center">
+          Create Session
+        </h1>
+        <p className="text-xl text-gray-600 font-medium text-center mt-2">
+          with {lawyer.name}
+        </p>
 
         <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4">
           <div>
             <label className="block text-gray-700">Title</label>
             <input
               {...register("title", { required: "Title is required" })}
-              className="w-full p-2 border border-gray-300 rounded"
+              className="w-full p-3 border border-gray-300 rounded-lg"
             />
             {errors.title && (
               <p className="text-red-500 text-sm">{errors.title.message}</p>
@@ -90,7 +101,7 @@ export default function Page() {
               {...register("description", {
                 required: "Description is required",
               })}
-              className="w-full p-2 border border-gray-300 rounded"
+              className="w-full p-3 border border-gray-300 rounded-lg"
             />
             {errors.description && (
               <p className="text-red-500 text-sm">
@@ -101,13 +112,13 @@ export default function Page() {
 
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+            className="w-full bg-gray-900 text-white py-3 px-6 rounded-md text-lg font-semibold hover:bg-blue-500 transition duration-200 shadow-md"
             disabled={mutationLoading}
           >
             {mutationLoading ? "Creating..." : "Create Session"}
           </button>
           {mutationError && (
-            <p className="text-red-500 text-sm">{mutationError.message}</p>
+            <p className="text-red-500 text-sm mt-2">{mutationError.message}</p>
           )}
         </form>
       </div>

@@ -169,7 +169,7 @@ const Signup: React.FC = () => {
       {/* Sign-up Container */}
       <div className="relative z-10 bg-white/20 backdrop-blur-lg border border-white/30 p-8 shadow-xl rounded-2xl w-full max-w-sm">
         <h2 className="text-3xl font-extrabold text-center text-white mb-6">
-          Sign Up
+          Welcome to LegalOne Community!
         </h2>
 
         {/* Display any potential errors */}

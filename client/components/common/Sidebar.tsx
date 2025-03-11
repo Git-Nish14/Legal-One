@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { client } from "@/lib/apollo/apollo-client";
+import { LogOut, User, Briefcase, Search, Users } from "lucide-react";
 
 export default function Sidebar() {
   const pathname = usePathname();
@@ -20,7 +21,6 @@ export default function Sidebar() {
   const userName = user?.name || "User";
   const userRole = user?.role || "GUEST";
 
-  // Get greeting based on time
   const getGreeting = () => {
     const hour = new Date().getHours();
     if (hour < 12) return "Good Morning";
@@ -28,7 +28,6 @@ export default function Sidebar() {
     return "Good Evening";
   };
 
-  // Logout function
   const handleLogout = () => {
     Cookies.remove("Authorization");
     client.clearStore();
@@ -36,12 +35,12 @@ export default function Sidebar() {
   };
 
   return (
-    <div className="w-64 bg-gray-900 text-white h-full p-6 flex flex-col justify-between shadow-lg">
+    <div className="w-72 h-full bg-gray-900 bg-opacity-75 backdrop-blur-lg text-white p-6 flex flex-col justify-between shadow-xl rounded-r-2xl">
       <div>
         {/* User Greeting */}
-        <div className="mb-6">
-          <h2 className="text-lg font-semibold">{getGreeting()},</h2>
-          <p className="text-xl font-bold">{userName}!</p>
+        <div className="mb-6 text-center">
+          <h2 className="text-lg font-medium">{getGreeting()},</h2>
+          <p className="text-2xl font-bold">{userName}!</p>
           <span className="text-sm text-gray-400 capitalize">
             ({userRole.toLowerCase()})
           </span>
@@ -51,79 +50,73 @@ export default function Sidebar() {
         <ul className="space-y-3">
           {user?.role === "USER" && (
             <>
-              <li>
-                <Link
-                  href="/home/explore"
-                  className={`block px-3 py-2 rounded-md hover:bg-gray-700 ${
-                    pathname.startsWith("/home/explore") ? "bg-gray-700" : ""
-                  }`}
-                >
-                  Explore
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/home/sessions"
-                  className={`block px-3 py-2 rounded-md hover:bg-gray-700 ${
-                    pathname.startsWith("/home/sessions") ? "bg-gray-700" : ""
-                  }`}
-                >
-                  My Sessions
-                </Link>
-              </li>
+              <SidebarLink
+                href="/home/explore"
+                icon={<Search size={20} />}
+                label="Explore"
+              />
+              <SidebarLink
+                href="/home/sessions"
+                icon={<Briefcase size={20} />}
+                label="My Sessions"
+              />
             </>
           )}
 
           {user?.role === "LAWYER" && (
             <>
-              <li>
-                <Link
-                  href="/home/sessions"
-                  className={`block px-3 py-2 rounded-md hover:bg-gray-700 ${
-                    pathname.startsWith("/home/sessions") ? "bg-gray-700" : ""
-                  }`}
-                >
-                  My Sessions
-                </Link>
-              </li>
+              <SidebarLink
+                href="/home/sessions"
+                icon={<Briefcase size={20} />}
+                label="My Sessions"
+              />
             </>
           )}
 
           {user?.role === "ADMIN" && (
             <>
-              <li>
-                <Link
-                  href="/home/lawyers"
-                  className={`block px-3 py-2 rounded-md hover:bg-gray-700 ${
-                    pathname.startsWith("/home/lawyers") ? "bg-gray-700" : ""
-                  }`}
-                >
-                  Manage Lawyers
-                </Link>
-              </li>
+              <SidebarLink
+                href="/home/lawyers"
+                icon={<Users size={20} />}
+                label="Manage Lawyers"
+              />
             </>
           )}
 
-          <li>
-            <Link
-              href="/home/profile"
-              className={`block px-3 py-2 rounded-md hover:bg-gray-700 ${
-                pathname.startsWith("/home/profile") ? "bg-gray-700" : ""
-              }`}
-            >
-              Profile
-            </Link>
-          </li>
+          <SidebarLink
+            href="/home/profile"
+            icon={<User size={20} />}
+            label="Profile"
+          />
         </ul>
       </div>
 
       {/* Logout Button */}
       <button
         onClick={handleLogout}
-        className="mt-6 p-2 bg-red-600 text-white rounded-md w-full hover:bg-red-700 transition"
+        className="mt-6 flex items-center justify-center gap-2 p-3 bg-red-600 text-white rounded-lg w-full hover:bg-red-700 transition-all"
       >
-        Logout
+        <LogOut size={20} /> Logout
       </button>
     </div>
   );
 }
+interface SidebarLinkProps {
+  href: string;
+  icon: React.ReactNode;
+  label: string;
+}
+const SidebarLink = ({ href, icon, label }: SidebarLinkProps) => {
+  const pathname = usePathname();
+  return (
+    <li>
+      <Link
+        href={href}
+        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all hover:bg-gray-700 
+        ${pathname.startsWith(href) ? "bg-gray-700" : "bg-transparent"}`}
+      >
+        {icon} <span className="text-base font-medium">{label}</span>
+      </Link>
+    </li>
+  );
+};
