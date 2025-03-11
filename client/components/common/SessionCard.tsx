@@ -6,6 +6,7 @@ import { GET_DATA } from "@/graphql/queries";
 import { UPDATE_SESSION_STATUS } from "@/graphql/mutations";
 import Link from "next/link";
 import Image from "next/image";
+import { Check, X, ArrowRight } from "lucide-react";
 
 interface Session {
   id: string;
@@ -49,21 +50,22 @@ const SessionCard: React.FC<{ session: Session }> = ({ session }) => {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg overflow-hidden border p-4 max-w-sm">
-      <div className="p-4">
-        <h2 className="text-xl font-bold text-gray-900">{session.title}</h2>
-        <p className="text-gray-600 text-sm mt-1">{session.description}</p>
-        <p className="text-gray-500 text-xs mt-1">
-          Created: {new Date(session.createdAt).toLocaleDateString()}
-        </p>
-        <p className="text-gray-500 text-xs mt-1">
-          Lawyer Completed: {session.lawyerCompleted ? "Yes" : "No"}
-        </p>
-        <p className="text-gray-500 text-xs">
-          User Completed: {session.userCompleted ? "Yes" : "No"}
+    <div className="bg-white rounded-2xl shadow-lg border p-5 flex flex-col h-[280px] w-full max-w-sm transition-all hover:shadow-xl">
+      {/* Session Info */}
+      <div className="flex-grow">
+        <h2 className="text-lg font-semibold text-gray-900">{session.title}</h2>
+        <p className="text-gray-600 text-sm mt-1 line-clamp-2">
+          {session.description}
         </p>
 
-        <div className="flex items-center mt-4">
+        <div className="text-gray-500 text-xs mt-2 space-y-1">
+          <p>📅 Created: {new Date(session.createdAt).toLocaleDateString()}</p>
+          <p>✔ Lawyer: {session.lawyerCompleted ? "Completed" : "Pending"}</p>
+          <p>✔ User: {session.userCompleted ? "Completed" : "Pending"}</p>
+        </div>
+
+        {/* User & Lawyer Info */}
+        <div className="flex items-center gap-3 mt-4">
           {userRole === "USER" ? (
             <>
               <Image
@@ -73,8 +75,8 @@ const SessionCard: React.FC<{ session: Session }> = ({ session }) => {
                 height={40}
                 className="rounded-full object-cover"
               />
-              <div className="ml-3">
-                <p className="text-gray-900 font-semibold">
+              <div>
+                <p className="text-gray-900 font-medium">
                   {session.lawyer.name}
                 </p>
                 <p className="text-gray-500 text-xs">
@@ -83,37 +85,41 @@ const SessionCard: React.FC<{ session: Session }> = ({ session }) => {
               </div>
             </>
           ) : userRole === "LAWYER" ? (
-            <p className="text-gray-900 font-semibold">
+            <p className="text-gray-900 font-medium">
               User: {session.user.name}
             </p>
           ) : null}
         </div>
+      </div>
 
-        {/* Buttons for LAWYER if session is PENDING */}
+      {/* Buttons Section (Always at Bottom) */}
+      <div className="mt-auto space-y-2">
         {userRole === "LAWYER" && session.status === "PENDING" && (
-          <div className="flex gap-2 mt-4">
+          <div className="flex gap-2">
             <button
               onClick={() => handleUpdateStatus("ACTIVE")}
-              className="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition"
+              className="w-full flex items-center justify-center gap-2 bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition"
               disabled={updating}
             >
-              {updating ? "Processing..." : "Accept"}
+              <Check size={18} />
+              {updating ? "Accepting" : "Accept"}
             </button>
             <button
               onClick={() => handleUpdateStatus("REJECTED")}
-              className="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition"
+              className="w-full flex items-center justify-center gap-2 bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition"
               disabled={updating}
             >
-              {updating ? "Processing..." : "Reject"}
+              <X size={18} />
+              {updating ? "Rejecting" : "Reject"}
             </button>
           </div>
         )}
 
-        {/* View Details Button */}
         {(userRole === "USER" || userRole === "LAWYER") &&
           (session.status === "ACTIVE" || session.status === "COMPLETED") && (
             <Link href={`/home/session/${session.id}`} passHref>
-              <button className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition mt-4">
+              <button className="w-full flex items-center justify-center gap-2 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition">
+                <ArrowRight size={18} />
                 View Details
               </button>
             </Link>
