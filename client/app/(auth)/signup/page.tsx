@@ -7,6 +7,7 @@ import { USER_SIGNUP, LAWYER_SIGNUP } from "@/graphql/mutations";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
 
 type UserSignupInputs = {
   name: string;
@@ -32,6 +33,7 @@ const Signup: React.FC = () => {
 
   const [isLawyer, setIsLawyer] = useState<boolean>(false);
   const [step, setStep] = useState<number>(1);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const router = useRouter();
 
   // State for User Signup
@@ -99,7 +101,7 @@ const Signup: React.FC = () => {
     const uniqueFilename = uuidv4();
     formData.append("public_id", uniqueFilename); // Store the image name as UUID
 
-    // Upload image without transformations (save credits)
+    // Upload image without transformations (to save credits)
     formData.append("folder", "lawyer_images"); // Optional: Store in a specific folder
 
     try {
@@ -129,7 +131,6 @@ const Signup: React.FC = () => {
             expires: 7,
           }
         );
-        // alert("User signup successful!");
         router.push("/home");
       }
     } catch (err) {
@@ -150,7 +151,6 @@ const Signup: React.FC = () => {
             expires: 7,
           }
         );
-        // alert("Lawyer signup successful!");
         router.push("/home");
       }
     } catch (err) {
@@ -159,24 +159,39 @@ const Signup: React.FC = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 shadow-2xl rounded-2xl w-full max-w-md">
-        <h2 className="text-3xl font-extrabold text-center text-gray-800 mb-6">
+    <div
+      className="relative flex justify-center items-center min-h-screen bg-cover bg-center px-4"
+      style={{ backgroundImage: "url('/loginbg.jpg')" }} // Same background as Sign In
+    >
+      {/* Background Blur Overlay */}
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm z-0"></div>
+
+      {/* Sign-up Container */}
+      <div className="relative z-10 bg-white/20 backdrop-blur-lg border border-white/30 p-8 shadow-xl rounded-2xl w-full max-w-sm">
+        <h2 className="text-3xl font-extrabold text-center text-white mb-6">
           Sign Up
         </h2>
 
-        {/* User/Lawyer Selection */}
-        <div className="flex mb-6 border border-gray-300 rounded-lg overflow-hidden">
+        {/* Display any potential errors */}
+        {(userError || lawyerError) && (
+          <p className="text-red-500 text-center mb-4">
+            {userError?.message || lawyerError?.message}
+          </p>
+        )}
+
+        {/* User/Lawyer Selection Toggle */}
+        <div className="flex mb-6">
           <button
             onClick={() => {
               setIsLawyer(false);
               setStep(1);
             }}
-            className={`w-1/2 py-2 text-lg font-medium transition ${
-              !isLawyer
-                ? "bg-blue-500 text-white"
-                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-            }`}
+            className={`w-1/2 py-2 text-lg font-medium border border-white/30 
+              ${
+                !isLawyer
+                  ? "bg-blue-500 text-white"
+                  : "bg-white/10 text-white hover:bg-white/20"
+              }`}
           >
             User
           </button>
@@ -185,11 +200,12 @@ const Signup: React.FC = () => {
               setIsLawyer(true);
               setStep(1);
             }}
-            className={`w-1/2 py-2 text-lg font-medium transition ${
-              isLawyer
-                ? "bg-blue-500 text-white"
-                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-            }`}
+            className={`w-1/2 py-2 text-lg font-medium border border-white/30 
+              ${
+                isLawyer
+                  ? "bg-blue-500 text-white"
+                  : "bg-white/10 text-white hover:bg-white/20"
+              }`}
           >
             Lawyer
           </button>
@@ -208,10 +224,11 @@ const Signup: React.FC = () => {
             }
           >
             <div className="mb-4">
-              <label className="block text-gray-700 font-medium">Name</label>
+              <label className="block text-white font-medium mb-1">Name</label>
               <input
                 type="text"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+                placeholder="Enter your name"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white/10 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
                 name="name"
                 value={isLawyer ? lawyerData.name : userData.name}
                 onChange={handleChange}
@@ -220,10 +237,11 @@ const Signup: React.FC = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block text-gray-700 font-medium">Email</label>
+              <label className="block text-white font-medium mb-1">Email</label>
               <input
                 type="email"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+                placeholder="Enter your email"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white/10 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
                 name="email"
                 value={isLawyer ? lawyerData.email : userData.email}
                 onChange={(e) => {
@@ -235,29 +253,39 @@ const Signup: React.FC = () => {
             </div>
 
             <div className="mb-6">
-              <label className="block text-gray-700 font-medium">
+              <label className="block text-white font-medium mb-1">
                 Password
               </label>
-              <input
-                type="password"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent"
-                name="password"
-                value={isLawyer ? lawyerData.password : userData.password}
-                onChange={handleChange}
-                required
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter your password"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white/10 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+                  name="password"
+                  value={isLawyer ? lawyerData.password : userData.password}
+                  onChange={handleChange}
+                  required
+                />
+                <button
+                  type="button"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-300 hover:text-white"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                >
+                  {showPassword ? (
+                    <EyeOffIcon size={20} />
+                  ) : (
+                    <EyeIcon size={20} />
+                  )}
+                </button>
+              </div>
             </div>
 
             <button
               type="submit"
-              className={`w-full py-2 text-lg font-semibold rounded-lg transition ${
-                isLawyer
-                  ? "bg-blue-500 text-white hover:bg-blue-600"
-                  : "bg-blue-500 text-white hover:bg-blue-600"
-              }`}
               disabled={isLawyer && !isLawyerStep1Complete}
+              className="w-full bg-blue-500 text-white py-2 rounded-lg font-semibold hover:bg-blue-600 transition duration-300 ease-in-out shadow-md"
             >
-              {isLawyer ? "Next" : "Sign Up"}
+              {isLawyer ? "Next" : userLoading ? "Signing Up..." : "Sign Up"}
             </button>
           </form>
         )}
@@ -266,14 +294,14 @@ const Signup: React.FC = () => {
         {isLawyer && step === 2 && (
           <form onSubmit={handleLawyerSignup} className="mt-4">
             <div className="mb-4">
-              <label className="block text-gray-700 font-medium">
+              <label className="block text-white font-medium mb-1">
                 Profile Picture
               </label>
               <input
                 type="file"
                 accept="image/*"
                 onChange={handleImageUpload}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white/10 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
                 required
               />
               {lawyerData.image && (
@@ -286,11 +314,12 @@ const Signup: React.FC = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block text-gray-700 font-medium">
+              <label className="block text-white font-medium mb-1">
                 Description
               </label>
               <textarea
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                placeholder="Briefly describe your practice..."
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white/10 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
                 name="description"
                 value={lawyerData.description}
                 onChange={handleChange}
@@ -299,9 +328,10 @@ const Signup: React.FC = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block text-gray-700 font-medium">Bio</label>
+              <label className="block text-white font-medium mb-1">Bio</label>
               <textarea
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                placeholder="Tell us more about yourself..."
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white/10 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
                 name="bio"
                 value={lawyerData.bio}
                 onChange={handleChange}
@@ -310,12 +340,13 @@ const Signup: React.FC = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block text-gray-700 font-medium">
+              <label className="block text-white font-medium mb-1">
                 Location
               </label>
               <input
                 type="text"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                placeholder="Your city/state"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white/10 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
                 name="location"
                 value={lawyerData.location}
                 onChange={handleChange}
@@ -325,12 +356,13 @@ const Signup: React.FC = () => {
 
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div>
-                <label className="block text-gray-700 font-medium">
+                <label className="block text-white font-medium mb-1">
                   Expertise
                 </label>
                 <input
                   type="text"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                  placeholder="e.g. Criminal, Family..."
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white/10 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
                   name="expertise"
                   value={lawyerData.expertise}
                   onChange={handleChange}
@@ -339,12 +371,13 @@ const Signup: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-gray-700 font-medium">
+                <label className="block text-white font-medium mb-1">
                   Experience (years)
                 </label>
                 <input
                   type="number"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                  placeholder="e.g. 5"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white/10 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
                   name="experience"
                   value={lawyerData.experience}
                   onChange={handleChange}
@@ -355,10 +388,13 @@ const Signup: React.FC = () => {
 
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div>
-                <label className="block text-gray-700 font-medium">Fees</label>
+                <label className="block text-white font-medium mb-1">
+                  Fees
+                </label>
                 <input
                   type="number"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                  placeholder="e.g. 200"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white/10 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
                   name="fee"
                   value={lawyerData.fee}
                   onChange={handleChange}
@@ -367,12 +403,13 @@ const Signup: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-gray-700 font-medium">
+                <label className="block text-white font-medium mb-1">
                   Cases Handled
                 </label>
                 <input
                   type="number"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                  placeholder="e.g. 50"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white/10 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
                   name="casesHandled"
                   value={lawyerData.casesHandled}
                   onChange={handleChange}
@@ -385,10 +422,18 @@ const Signup: React.FC = () => {
               type="submit"
               className="w-full bg-green-500 text-white py-2 text-lg font-semibold rounded-lg hover:bg-green-600 transition"
             >
-              Sign Up as Lawyer
+              {lawyerLoading ? "Signing Up..." : "Sign Up as Lawyer"}
             </button>
           </form>
         )}
+
+        {/* Sign In Link */}
+        <p className="text-center text-white mt-4">
+          Already have an account?{" "}
+          <a href="/signin" className="text-blue-300 hover:underline">
+            Sign In
+          </a>
+        </p>
       </div>
     </div>
   );
