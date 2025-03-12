@@ -15,6 +15,7 @@ import {
   FileText,
   CaseSensitive,
 } from "lucide-react";
+import ProfileRolePageSkeleton from "@/components/loading/ProfileRolePageSkeleton";
 
 const ProfilePage = () => {
   const { data, loading, error } = useQuery(GET_DATA);
@@ -46,7 +47,7 @@ const ProfilePage = () => {
   }, [user, setValue]);
 
   if (loading)
-    return <p className="text-center text-gray-500 text-lg">Loading...</p>;
+    return <ProfileRolePageSkeleton />;
   if (error)
     return (
       <p className="text-center text-red-500 text-lg">Error: {error.message}</p>

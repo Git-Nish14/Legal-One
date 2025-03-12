@@ -7,6 +7,7 @@ import Image from "next/image";
 import { MapPin, Briefcase, Scale, DollarSign, ArrowLeft } from "lucide-react";
 import { GET_LAWYER_BY_ID } from "@/graphql/queries";
 import Link from "next/link";
+import ProfilePageSkeleton from "@/components/loading/ProfilePageSkeleton";
 
 export default function ProfilePage() {
   const { id } = useParams() as { id: string };
@@ -16,7 +17,7 @@ export default function ProfilePage() {
   });
 
   if (loading)
-    return <div className="text-center text-gray-700">Loading...</div>;
+    return <ProfilePageSkeleton />
   if (error)
     return (
       <div className="text-center text-red-500">Error: {error.message}</div>

@@ -8,6 +8,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { GET_LAWYER_BY_ID } from "@/graphql/queries";
 import { CREATE_SESSION } from "@/graphql/mutations";
 import { ArrowLeft } from "lucide-react";
+import CreateSessionPageSkeleton from "@/components/loading/CreateSessionPageSkeleton";
 
 interface FormData {
   title: string;
@@ -31,7 +32,7 @@ export default function CreateSessionPage() {
   } = useForm<FormData>();
 
   if (loading)
-    return <div className="text-center text-gray-700">Loading...</div>;
+    return <CreateSessionPageSkeleton />;
   if (error)
     return (
       <div className="text-center text-red-500">Error: {error.message}</div>

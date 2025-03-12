@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useQuery } from "@apollo/client";
 import LawyerCard from "@/components/common/LawyerCard";
 import { GET_ACCEPTED_LAWYERS } from "@/graphql/queries";
+import ExplorePageSkeleton from "@/components/loading/ExplorePageSkeleton";
 
 export default function ExplorePage() {
   const { loading, error, data } = useQuery(GET_ACCEPTED_LAWYERS);
@@ -11,9 +12,7 @@ export default function ExplorePage() {
 
   if (loading)
     return (
-      <div className="flex justify-center items-center min-h-screen text-gray-700 text-lg">
-        Loading...
-      </div>
+      <ExplorePageSkeleton />
     );
 
   if (error)

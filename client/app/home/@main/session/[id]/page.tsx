@@ -10,6 +10,7 @@ import {
   UPDATE_LAWYER_COMPLETED,
 } from "@/graphql/mutations";
 import { CheckCircle, XCircle, ArrowLeft } from "lucide-react";
+import ChatPageSkeleton from "@/components/loading/ChatPageSkeleton";
 
 export default function ChatPage() {
   const { id } = useParams() as { id: string };
@@ -52,7 +53,7 @@ export default function ChatPage() {
       </p>
     );
   if (userLoading || sessionLoading)
-    return <p className="text-center">Loading...</p>;
+    return <ChatPageSkeleton />;
   if (userError)
     return (
       <p className="text-red-500 text-center">Error: {userError.message}</p>
@@ -159,12 +160,11 @@ export default function ChatPage() {
 
           {/* Completion Button Below Lawyer Details */}
           <button
-            className={`mt-6 py-4 rounded-lg text-white font-semibold transition-all text-center text-xl ${
-              (session?.userCompleted && isUser) ||
+            className={`mt-6 py-4 rounded-lg text-white font-semibold transition-all text-center text-xl ${(session?.userCompleted && isUser) ||
               (session?.lawyerCompleted && isLawyer)
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-gray-900 hover:bg-blue-500"
-            }`}
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-gray-900 hover:bg-blue-500"
+              }`}
             onClick={handleCompletion}
             disabled={
               (isUser && session?.userCompleted) ||

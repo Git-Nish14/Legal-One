@@ -23,7 +23,13 @@ export default function HomePage() {
     }
   }, [data, loading, router]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return (<div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+    <div className="text-4xl font-extrabold text-gray-900 tracking-wide relative">
+      <span className="animate-pulse">LEGAL-ONE</span>
+    </div>
+    <p className="text-gray-500 text-lg mt-2 animate-pulse">Loading...</p>
+  </div>
+  );
   if (error) return <p>Error loading data</p>;
 
   return null; // Since we are redirecting, no UI is needed

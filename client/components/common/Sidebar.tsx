@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { client } from "@/lib/apollo/apollo-client";
 import { LogOut, User, Briefcase, Search, Users } from "lucide-react";
+import SidebarSkeleton from "../loading/SidebarSkeleton";
 
 export default function Sidebar() {
   const pathname = usePathname();
@@ -14,7 +15,7 @@ export default function Sidebar() {
     fetchPolicy: "network-only", // Always fetch fresh data from API
   });
 
-  if (loading) return <p className="text-white p-4">Loading...</p>;
+  if (loading) return <SidebarSkeleton />;
   if (error) return <p className="text-red-500 p-4">Error loading data</p>;
 
   const user = data?.getData;
