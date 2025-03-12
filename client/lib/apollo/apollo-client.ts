@@ -33,7 +33,7 @@ const authMiddleware = new ApolloLink((operation, forward) => {
 
 // HTTP link for queries & mutations
 const httpLink = new HttpLink({
-  uri: "http://localhost:4000/graphql",
+  uri: process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:4000/graphql",
 });
 
 // WebSocket link for subscriptions
@@ -41,7 +41,7 @@ const wsLink =
   typeof window !== "undefined"
     ? new GraphQLWsLink(
       createClient({
-        url: "ws://localhost:4000/graphql",
+        url: process.env.NEXT_PUBLIC_BACKEND_WS_URL || "ws://localhost:4000/graphql",
         connectionParams: () => ({
           Authorization: getToken(),
         }),

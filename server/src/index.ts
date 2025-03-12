@@ -14,7 +14,7 @@ const startServer = async () => {
   const app: any = express();
   app.use(
     cors({
-      origin: [ENV.FRONTEND_URL, "https://studio.apollographql.com"],
+      origin: [ENV.FRONTEND_URL, "https://studio.apollographql.com", "http://localhost:3000"],
       credentials: true,
     })
   );
