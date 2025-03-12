@@ -4,6 +4,7 @@ import { GET_CHAT_BY_SESSION } from "@/graphql/queries";
 import { SEND_MESSAGE } from "@/graphql/mutations";
 import { NEW_MESSAGE_SUBSCRIPTION } from "@/graphql/subscriptions";
 import { GET_SESSION_BY_ID } from "@/graphql/queries"; // Import session query
+import ChatboxSkeleton from "../loading/ChatboxSkeleton";
 
 interface ChatboxProps {
     sessionId: string;
@@ -67,7 +68,7 @@ export default function Chatbox({ sessionId }: ChatboxProps) {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
 
-    if (loading) return <p>Loading chat...</p>;
+    if (loading) return <ChatboxSkeleton />;
     if (error) return <p>Error loading chat</p>;
 
     const chatId = data?.getChatBySession?.id;
