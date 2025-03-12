@@ -8,5 +8,6 @@ export const ENV = {
   PORT: process.env.PORT || 4000,
   DATABASE_URL: process.env.DATABASE_URL as string,
   JWT_SECRET: process.env.JWT_SECRET as string,
+  FRONTEND_URL: process.env.FRONTEND_URL as string,
   APOLLO_PLAYGROUND: process.env.APOLLO_PLAYGROUND === "true",
 };

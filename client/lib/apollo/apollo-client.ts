@@ -33,36 +33,36 @@ const authMiddleware = new ApolloLink((operation, forward) => {
 
 // HTTP link for queries & mutations
 const httpLink = new HttpLink({
-  uri: "http://localhost:4000/graphql",
+  uri: "http://" + process.env.NEXT_PUBLIC_BACKEND_URL + "/graphql",
 });
 
 // WebSocket link for subscriptions
 const wsLink =
   typeof window !== "undefined"
     ? new GraphQLWsLink(
-        createClient({
-          url: "ws://localhost:4000/graphql",
-          connectionParams: () => ({
-            Authorization: getToken(),
-          }),
-        })
-      )
+      createClient({
+        url: "ws://" + process.env.NEXT_PUBLIC_BACKEND_URL + "/graphql",
+        connectionParams: () => ({
+          Authorization: getToken(),
+        }),
+      })
+    )
     : null;
 
 // Split communication between WebSocket and HTTP
 const splitLink =
   typeof window !== "undefined" && wsLink !== null
     ? split(
-        ({ query }) => {
-          const definition = getMainDefinition(query);
-          return (
-            definition.kind === "OperationDefinition" &&
-            definition.operation === "subscription"
-          );
-        },
-        wsLink,
-        concat(authMiddleware, httpLink)
-      )
+      ({ query }) => {
+        const definition = getMainDefinition(query);
+        return (
+          definition.kind === "OperationDefinition" &&
+          definition.operation === "subscription"
+        );
+      },
+      wsLink,
+      concat(authMiddleware, httpLink)
+    )
     : concat(authMiddleware, httpLink);
 
 // Create Apollo Client
