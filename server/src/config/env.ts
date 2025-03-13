@@ -1,8 +1,8 @@
 // @ts-ignore
-import dotenv from "dotenv";
+import * as dotenv from "dotenv";
+dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 import path from "path";
 
-dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
 export const ENV = {
   NODE_ENV: process.env.NODE_ENV || "development",
