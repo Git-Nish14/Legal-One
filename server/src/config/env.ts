@@ -1,10 +1,7 @@
+// @ts-ignore
 import * as dotenv from "dotenv";
 import path from "path";
-
-// Use a relative path for local development, but default behavior in production
-const envPath = process.env.NODE_ENV === "production" ? undefined : path.resolve(__dirname, "../../.env");
-
-dotenv.config({ path: envPath });
+dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
 export const ENV = {
   NODE_ENV: process.env.NODE_ENV || "development",
