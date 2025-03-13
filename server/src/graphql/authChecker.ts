@@ -1,6 +1,15 @@
 import { AuthChecker } from "type-graphql";
 import { Context } from "./context";
 
+import { Request } from "express";
+
+export interface AuthRequest extends Request {
+  user?: {
+    id: string;
+    role: any;
+  };
+}
+
 // Define role types
 export type Role = "user" | "lawyer" | "admin";
 
