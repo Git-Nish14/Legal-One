@@ -1,15 +1,6 @@
 import { AuthChecker } from "type-graphql";
 import { Context } from "./context";
 
-import { Request } from "express";
-
-export interface AuthRequest extends Request {
-  user?: {
-    id: string;
-    role: any;
-  };
-}
-
 // Define role types
 export type Role = "user" | "lawyer" | "admin";
 
@@ -28,5 +19,5 @@ export const authChecker: AuthChecker<Context> = ({ context }, roles) => {
   }
 
   // Check if the user has at least one required role
-  return roles.includes(user.role);
+  return roles.includes(user.role) as any;
 };
