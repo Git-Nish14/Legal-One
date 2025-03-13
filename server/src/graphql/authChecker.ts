@@ -5,7 +5,7 @@ import { Context } from "./context";
 export type Role = "user" | "lawyer" | "admin";
 
 // Custom AuthChecker function
-export const authChecker: AuthChecker<Context> = ({ context }, roles) => {
+export const authChecker: any = ({ context }, roles) => {
   const { user } = context;
 
   // Check if user is logged in
