@@ -22,7 +22,7 @@ export interface Context {
 // Function to extract user from JWT
 const getUserFromToken = (req: Request): User | null => {
   try {
-    const authHeader = req.headers.authorization;
+    const authHeader = req.headers.authorization as any;
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return null; // No token found
