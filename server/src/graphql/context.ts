@@ -15,12 +15,12 @@ export interface User {
 export interface Context {
   prisma: PrismaClient;
   user?: User | null;
-  req: Request;
+  req: any;
   res: Response;
 }
 
 // Function to extract user from JWT
-const getUserFromToken = (req: Request): User | null => {
+const getUserFromToken = (req: any): User | null => {
   try {
     const authHeader = req.headers.authorization as any;
 
@@ -28,7 +28,7 @@ const getUserFromToken = (req: Request): User | null => {
       return null; // No token found
     }
 
-    const token = authHeader.split(" ")[1]; // Extract Bearer Token
+    const token = authHeader.split(" ")[1] as any; // Extract Bearer Token
     if (!token) return null;
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as User;
     return decoded; // Return user data (id, email, etc.)
@@ -42,7 +42,7 @@ export const context = ({
   req,
   res,
 }: {
-  req: Request;
+  req: any;
   res: Response;
 }): Context => {
   return {
