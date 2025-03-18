@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect, useRef } from "react";
 import { gql, useQuery, useMutation, useSubscription } from "@apollo/client";
 import { GET_CHAT_BY_SESSION } from "@/graphql/queries";
@@ -13,6 +14,8 @@ interface ChatboxProps {
 export default function Chatbox({ sessionId }: ChatboxProps) {
     const [message, setMessage] = useState("");
     const [messages, setMessages] = useState<any[]>([]);
+    const [isSending, setIsSending] = useState(false);
+
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     // Fetch session status
@@ -73,17 +76,23 @@ export default function Chatbox({ sessionId }: ChatboxProps) {
 
     const chatId = data?.getChatBySession?.id;
 
+
     const handleSendMessage = async () => {
-        if (!message.trim() || !chatId) return;
+        if (!message.trim() || !chatId || isSending) return;
+
+        setIsSending(true);
         await sendMessage({ variables: { chatId, content: message } });
         setMessage("");
+        setIsSending(false);
     };
 
+
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === "Enter") {
+        if (e.key === "Enter" && !isSending) {
             handleSendMessage();
         }
     };
+
 
     return (
         <div className="w-96 h-[500px] flex flex-col border rounded-md bg-gray-100 shadow-md">
@@ -122,10 +131,13 @@ export default function Chatbox({ sessionId }: ChatboxProps) {
                     />
                     <button
                         onClick={handleSendMessage}
-                        className="bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600"
+                        className={`bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 ${isSending ? "opacity-50 cursor-not-allowed" : ""
+                            }`}
+                        disabled={isSending}
                     >
-                        Send
+                        {isSending ? "Sending..." : "Send"}
                     </button>
+
                 </div>
             )}
         </div>

@@ -8,7 +8,7 @@ import { pubSub } from "./pubsub";
 // Function to dynamically import all resolvers
 const loadResolvers = async (): Promise<any[]> => {
   // Construct the resolver path pattern
-  const resolverPaths = await glob(`dist/modules/resolvers/**/*.js`);
+  const resolverPaths = await glob(`src/modules/resolvers/**/*.ts`);
   const resolvers = await Promise.all(
     resolverPaths.map(async (resolverPath: any) => {
       const module = await import(path.resolve(resolverPath));
