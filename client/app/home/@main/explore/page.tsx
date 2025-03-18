@@ -30,14 +30,14 @@ export default function ExplorePage() {
   );
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-8 ml-10">
+    <div className="max-w-7xl ml-10 mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Header Section with Search Bar */}
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold text-gray-900">Explore Lawyers</h1>
+      <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Explore Lawyers</h1>
         <input
           type="text"
           placeholder="Search by name or expertise..."
-          className="w-80 px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-700 text-lg"
+          className="w-full sm:w-80 px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-700 text-lg"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />

@@ -31,8 +31,7 @@ export default function CreateSessionPage() {
     formState: { errors },
   } = useForm<FormData>();
 
-  if (loading)
-    return <CreateSessionPageSkeleton />;
+  if (loading) return <CreateSessionPageSkeleton />;
   if (error)
     return (
       <div className="text-center text-red-500">Error: {error.message}</div>
@@ -53,34 +52,34 @@ export default function CreateSessionPage() {
   };
 
   return (
-    <div className="min-h-screen flex ml-10 p-10 relative">
+    <div className="min-h-screen flex flex-col md:flex-row ml-4 md:ml-10 p-4 md:p-10 relative">
       {/* Left Section - Lawyer Image */}
-      <div className="w-1/3 bg-yellow-400 flex justify-center items-center p-10 rounded-l-2xl">
+      <div className="w-full md:w-1/3 bg-yellow-400 flex justify-center items-center p-6 md:p-10 rounded-t-2xl md:rounded-l-2xl md:rounded-tr-none">
         <Image
           src={lawyer.image}
           alt={lawyer.name}
           width={300}
           height={300}
-          className="rounded-full object-cover w-64 h-64 border-8 border-white shadow-lg"
+          className="rounded-full object-cover w-40 h-40 md:w-64 md:h-64 border-8 border-white shadow-lg"
           unoptimized
         />
       </div>
 
       {/* Right Section - Form */}
-      <div className="w-2/3 p-16 bg-white shadow-md flex flex-col justify-center relative rounded-r-2xl">
-        {/* Back Button */}
+      <div className="w-full md:w-2/3 p-6 md:p-16 bg-white shadow-md flex flex-col justify-center relative rounded-b-2xl md:rounded-r-2xl md:rounded-bl-none">
+        {/* Back Button - Hidden on Mobile */}
         <button
           onClick={() => router.back()}
-          className="absolute top-6 right-6 flex items-center gap-2 bg-gray-200 px-4 py-2 rounded-md shadow hover:bg-gray-300 transition duration-200"
+          className="hidden md:flex absolute top-6 right-6 items-center gap-2 bg-gray-200 px-4 py-2 rounded-md shadow hover:bg-gray-300 transition duration-200"
         >
           <ArrowLeft size={20} className="text-gray-700" />
           <span className="text-gray-700 font-medium">Back</span>
         </button>
 
-        <h1 className="text-4xl font-extrabold text-gray-900 text-center">
+        <h1 className="text-2xl md:text-4xl font-extrabold text-gray-900 text-center">
           Create Session
         </h1>
-        <p className="text-xl text-gray-600 font-medium text-center mt-2">
+        <p className="text-lg md:text-xl text-gray-600 font-medium text-center mt-2">
           with {lawyer.name}
         </p>
 

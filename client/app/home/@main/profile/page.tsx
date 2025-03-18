@@ -46,13 +46,11 @@ const ProfilePage = () => {
     }
   }, [user, setValue]);
 
-  if (loading)
-    return <ProfileRolePageSkeleton />;
+  if (loading) return <ProfileRolePageSkeleton />;
   if (error)
     return (
       <p className="text-center text-red-500 text-lg">Error: {error.message}</p>
     );
-
   if (!user)
     return <p className="text-center text-gray-500 text-lg">No data found</p>;
 
@@ -80,9 +78,9 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="flex flex-col items-center w-full min-h-screen bg-gray-100 p-6">
-      <div className="max-w-3xl w-full bg-white shadow-lg rounded-xl p-6">
-        <h1 className="text-3xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+    <div className="flex flex-col items-center w-full min-h-screen bg-gray-100 p-4 sm:p-6">
+      <div className="w-full max-w-full sm:max-w-3xl bg-white shadow-lg rounded-xl p-4 sm:p-6 mx-4">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 flex items-center gap-2">
           <User className="w-7 h-7 text-blue-600" />
           Profile
         </h1>
@@ -97,7 +95,7 @@ const ProfilePage = () => {
 
         {user.role === "LAWYER" && (
           <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-3">
+            <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-3">
               Update Profile
             </h2>
 
@@ -253,8 +251,7 @@ const ProfilePage = () => {
             {/* Update Success Message */}
             {updateSuccess && (
               <p className="text-green-600 flex items-center gap-2 mt-2">
-                <CheckCircle className="w-5 h-5" /> Profile updated
-                successfully!
+                <CheckCircle className="w-5 h-5" /> Profile updated successfully!
               </p>
             )}
 

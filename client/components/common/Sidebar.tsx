@@ -5,10 +5,14 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { client } from "@/lib/apollo/apollo-client";
-import { LogOut, User, Briefcase, Search, Users } from "lucide-react";
+import { LogOut, User, Briefcase, Search, Users, X } from "lucide-react";
 import SidebarSkeleton from "../loading/SidebarSkeleton";
 
-export default function Sidebar() {
+interface SidebarProps {
+  closeSidebar: () => void;
+}
+
+export default function Sidebar({ closeSidebar }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const { data, loading, error } = useQuery(GET_DATA, {
@@ -19,7 +23,7 @@ export default function Sidebar() {
   if (error) return <p className="text-red-500 p-4">Error loading data</p>;
 
   const user = data?.getData;
-  const userName = user?.name || "User";
+  const userName = user?.name || "USER";
   const userRole = user?.role || "GUEST";
 
   const getGreeting = () => {
@@ -36,8 +40,16 @@ export default function Sidebar() {
   };
 
   return (
-    <div className="w-72 h-full bg-gray-900 bg-opacity-75 backdrop-blur-lg text-white p-6 flex flex-col justify-between shadow-xl rounded-r-2xl">
+    <div className="w-64 sm:w-72 h-full bg-gray-900 bg-opacity-75 backdrop-blur-lg text-white p-6 flex flex-col justify-between shadow-xl rounded-r-2xl fixed top-0 left-0 z-50 overflow-y-auto">
       <div>
+        {/* Close Button for Mobile */}
+        <button
+          onClick={closeSidebar}
+          className="sm:hidden absolute top-4 right-4 text-white hover:text-gray-400"
+        >
+          <X size={24} />
+        </button>
+
         {/* User Greeting */}
         <div className="mb-6 text-center">
           <h2 className="text-lg font-medium">{getGreeting()},</h2>
@@ -55,11 +67,13 @@ export default function Sidebar() {
                 href="/home/explore"
                 icon={<Search size={20} />}
                 label="Explore"
+                closeSidebar={closeSidebar}
               />
               <SidebarLink
                 href="/home/sessions"
                 icon={<Briefcase size={20} />}
                 label="My Sessions"
+                closeSidebar={closeSidebar}
               />
             </>
           )}
@@ -70,6 +84,7 @@ export default function Sidebar() {
                 href="/home/sessions"
                 icon={<Briefcase size={20} />}
                 label="My Sessions"
+                closeSidebar={closeSidebar}
               />
             </>
           )}
@@ -80,6 +95,7 @@ export default function Sidebar() {
                 href="/home/lawyers"
                 icon={<Users size={20} />}
                 label="Manage Lawyers"
+                closeSidebar={closeSidebar}
               />
             </>
           )}
@@ -88,6 +104,7 @@ export default function Sidebar() {
             href="/home/profile"
             icon={<User size={20} />}
             label="Profile"
+            closeSidebar={closeSidebar}
           />
         </ul>
       </div>
@@ -102,17 +119,21 @@ export default function Sidebar() {
     </div>
   );
 }
+
 interface SidebarLinkProps {
   href: string;
   icon: React.ReactNode;
   label: string;
+  closeSidebar: () => void;
 }
-const SidebarLink = ({ href, icon, label }: SidebarLinkProps) => {
+
+const SidebarLink = ({ href, icon, label, closeSidebar }: SidebarLinkProps) => {
   const pathname = usePathname();
   return (
     <li>
       <Link
         href={href}
+        onClick={closeSidebar} // Close sidebar when link is clicked
         className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all hover:bg-gray-700 
         ${pathname.startsWith(href) ? "bg-gray-700" : "bg-transparent"}`}
       >

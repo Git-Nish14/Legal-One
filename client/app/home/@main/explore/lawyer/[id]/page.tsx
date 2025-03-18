@@ -16,8 +16,7 @@ export default function ProfilePage() {
     variables: { lawyerId: id },
   });
 
-  if (loading)
-    return <ProfilePageSkeleton />
+  if (loading) return <ProfilePageSkeleton />;
   if (error)
     return (
       <div className="text-center text-red-500">Error: {error.message}</div>
@@ -26,30 +25,30 @@ export default function ProfilePage() {
   const lawyer = data.getLawyerById;
 
   return (
-    <div className="min-h-screen flex bg-gray-100 ml-10 relative">
+    <div className="min-h-screen flex flex-col md:flex-row bg-gray-100 ml-0 md:ml-10 relative">
       {/* Back Button */}
       <button
         onClick={() => router.back()}
-        className="absolute top-6 right-10 flex items-center gap-2 bg-gray-200 px-4 py-2 rounded-md shadow hover:bg-gray-300 transition duration-200"
+        className="absolute top-4 right-4 md:top-6 md:right-10 flex items-center gap-2 bg-gray-200 px-4 py-2 rounded-md shadow hover:bg-gray-300 transition duration-200"
       >
         <ArrowLeft size={20} className="text-gray-700" />
         <span className="text-gray-700 font-medium">Back</span>
       </button>
 
       {/* Left Section - Lawyer Image */}
-      <div className="w-1/3 bg-yellow-400 flex justify-center items-center p-10 rounded-2xl">
+      <div className="w-full md:w-1/3 bg-yellow-400 flex justify-center items-center p-5 rounded-2xl">
         <Image
           src={lawyer.image}
           alt={lawyer.name}
           width={300}
           height={300}
-          className="rounded-full object-cover w-64 h-64 border-8 border-white shadow-lg"
+          className="rounded-full object-cover w-48 h-48 md:w-64 md:h-64 border-8 border-white shadow-lg"
           unoptimized
         />
       </div>
 
       {/* Right Section - Lawyer Details */}
-      <div className="w-2/3 p-16 bg-white shadow-md flex flex-col justify-center">
+      <div className="w-full md:w-2/3 p-8 md:p-16 bg-white shadow-md flex flex-col justify-center">
         <h1 className="text-5xl font-extrabold text-gray-900">{lawyer.name}</h1>
         <p className="text-xl text-gray-600 font-medium">{lawyer.expertise}</p>
 
