@@ -13,10 +13,13 @@ export class CreateUserResolver {
     @Arg("password") password: string,
     @Ctx() ctx: Context
   ): Promise<AuthPayload> {
+    const existingLawyer = await ctx.prisma.lawyer.findUnique({ where: { email } });
     const existingUser = await ctx.prisma.user.findUnique({ where: { email } });
-    if (existingUser) {
+
+    if (existingLawyer || existingUser) {
       throw new Error("User with this email already exists");
     }
+
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
