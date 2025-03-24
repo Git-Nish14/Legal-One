@@ -1,6 +1,6 @@
 export default function SidebarSkeleton() {
     return (
-        <div className="w-72 h-full bg-gray-900 bg-opacity-75 backdrop-blur-lg text-white p-6 flex flex-col justify-between shadow-xl rounded-r-2xl">
+        <div className="hidden w-72 h-full bg-gray-900 bg-opacity-75 backdrop-blur-lg text-white p-6 sm:flex flex-col justify-between shadow-xl rounded-r-2xl">
             <div>
                 {/* User Greeting Skeleton */}
                 <div className="mb-6 text-center">
