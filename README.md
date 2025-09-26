@@ -38,4 +38,4 @@ This project is licensed under the MIT License.
 ## Contact
 
 For any queries, contact [@Om Patel](https://github.com/git-om) and [@Nish Patel](https://github.com/Git-Nish14).
-Made with ❤️ by CEO [@Techifive](https://www.techifive.com)
+Made with ❤️ and 🧠
