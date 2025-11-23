@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Legal One",
-  description: "Generate by Team Techifive",
+  description: "Created by Nish patel and Om Patel",
 };
 
 export default function RootLayout({

@@ -132,14 +132,23 @@ export default function Home() {
       {/* Footer */}
       <footer className="bg-black shadow-lg py-6 text-center mt-0">
         <p className="text-gray-400 font-medium">
-          &copy; {new Date().getFullYear()} Legal One. All rights reserved by
+          &copy; {new Date().getFullYear()} Legal One. All rights reserved by{" "}
           <Link
-            href="https://www.techifive.com"
+            href="https://www.nishpatel.dev"
             target="_blank"
             rel="noopener noreferrer"
             className="font-bold text-yellow-500 hover:underline ml-1"
           >
-            Team Techifive
+            Nish Patel
+          </Link>{" "}
+          and{" "}
+          <Link
+            href="https://om.techifive.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-bold text-yellow-500 hover:underline ml-1"
+          >
+            Om Patel
           </Link>
           .
         </p>
